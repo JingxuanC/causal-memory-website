@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import { getLang, t } from "@/lib/i18n";
+import { LangToggle } from "@/components/lang-toggle";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -15,17 +17,19 @@ export const metadata: Metadata = {
     "An agent memory system with a causal core — and the only one that models inhibition. Facts, temporal state, and decision → outcome causal edges on one SQLite store.",
 };
 
-const nav = [
-  { href: "/docs/getting-started", label: "Docs" },
-  { href: "/benchmarks", label: "Benchmarks" },
-  { href: "/playground", label: "Playground" },
-  { href: "/blog", label: "Blog" },
-  { href: "/pricing", label: "Pricing" },
-];
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const lang = await getLang();
+  const d = t(lang);
+  const nav = [
+    { href: "/docs/getting-started", label: d.navDocs },
+    { href: "/benchmarks", label: d.navBenchmarks },
+    { href: "/playground", label: d.navPlayground },
+    { href: "/blog", label: d.navBlog },
+    { href: "/pricing", label: d.navPricing },
+  ];
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang={lang === "zh" ? "zh-CN" : "en"} className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <header className="border-b border-[#1d3a5f] sticky top-0 z-40 bg-[#0b1220]/90 backdrop-blur">
           <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
@@ -40,8 +44,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               ))}
             </nav>
             <div className="flex items-center gap-3 text-sm">
+              <LangToggle lang={lang} />
               <Link href="/dashboard" className="text-[#93a7c4] hover:text-[#e8f1ff] transition-colors">
-                Cloud
+                {d.navCloud}
               </Link>
               <a
                 href="https://github.com/JingxuanC/causal-memory"

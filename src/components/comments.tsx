@@ -1,8 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { CommentForm } from "./comment-form";
+import { getLang, t } from "@/lib/i18n";
 
 export async function Comments({ slug }: { slug: string }) {
+  const lang = await getLang();
+  const d = t(lang);
   const [session, comments] = await Promise.all([
     auth(),
     prisma.comment.findMany({
@@ -15,16 +18,19 @@ export async function Comments({ slug }: { slug: string }) {
 
   return (
     <section className="mt-14 border-t border-[#1d3a5f] pt-8">
-      <h2 className="text-xl font-semibold text-[#e8f1ff]">Comments ({comments.length})</h2>
+      <h2 className="text-xl font-semibold text-[#e8f1ff]">{d.comments} ({comments.length})</h2>
       <div className="mt-6">
         {session?.user ? (
-          <CommentForm slug={slug} />
+          <CommentForm
+            slug={slug}
+            labels={{ placeholder: d.commentPlaceholder, post: d.postComment, posting: d.posting }}
+          />
         ) : (
           <p className="text-sm text-[#93a7c4]">
             <a href="/api/auth/signin" className="text-[#4cc2ff] hover:underline">
-              Sign in with GitHub
-            </a>{" "}
-            to leave a comment.
+              {d.signinGithub}
+            </a>
+            {d.signinToComment}
           </p>
         )}
       </div>

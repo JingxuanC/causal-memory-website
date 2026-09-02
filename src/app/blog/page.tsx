@@ -1,15 +1,18 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getPosts } from "@/lib/markdown";
+import { getLang, t } from "@/lib/i18n";
 
 export const metadata: Metadata = { title: "Blog" };
 
-export default function BlogIndex() {
+export default async function BlogIndex() {
+  const lang = await getLang();
+  const d = t(lang);
   const posts = getPosts();
   return (
     <div className="max-w-3xl mx-auto px-6 py-14">
-      <h1 className="text-3xl font-bold text-[#e8f1ff]">Blog</h1>
-      <p className="mt-2 text-[#93a7c4]">Research notes, design decisions, and release updates.</p>
+      <h1 className="text-3xl font-bold text-[#e8f1ff]">{d.blogTitle}</h1>
+      <p className="mt-2 text-[#93a7c4]">{d.blogSub}</p>
       <div className="mt-10 flex flex-col gap-8">
         {posts.map((p) => (
           <article key={p.slug} className="border-b border-[#1d3a5f] pb-8">
@@ -21,7 +24,7 @@ export default function BlogIndex() {
             </Link>
             <p className="mt-2 text-sm text-[#93a7c4]">{p.description}</p>
             <Link href={`/blog/${p.slug}`} className="mt-2 inline-block text-sm text-[#4cc2ff] hover:underline">
-              Read more →
+              {d.readMore}
             </Link>
           </article>
         ))}

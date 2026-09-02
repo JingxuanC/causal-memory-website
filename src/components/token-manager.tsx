@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 
 type Token = { id: string; name: string; prefix: string; createdAt: string };
 
-export function TokenManager({ tokens }: { tokens: Token[] }) {
+type Labels = {
+  tokenName: string; createToken: string; creating: string; tokenCreated: string;
+  copy: string; copied: string; revoke: string; noTokens: string;
+};
+
+export function TokenManager({ tokens, labels }: { tokens: Token[]; labels: Labels }) {
   const [name, setName] = useState("");
   const [pending, setPending] = useState(false);
   const [freshToken, setFreshToken] = useState<string | null>(null);
@@ -41,7 +46,7 @@ export function TokenManager({ tokens }: { tokens: Token[] }) {
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Token name (e.g. laptop)"
+          placeholder={labels.tokenName}
           className="flex-1 rounded-md border border-[#2b4f7c] bg-[#0e1930] px-3 py-2 text-sm text-[#e8f1ff] placeholder-[#5a719c] focus:outline-none focus:border-[#4cc2ff]"
         />
         <button
@@ -49,14 +54,14 @@ export function TokenManager({ tokens }: { tokens: Token[] }) {
           disabled={pending}
           className="rounded-md bg-[#4cc2ff] px-4 py-2 text-sm font-semibold text-[#0b1220] hover:bg-[#6fd0ff] disabled:opacity-50 transition-colors"
         >
-          {pending ? "Creating…" : "Create token"}
+          {pending ? labels.creating : labels.createToken}
         </button>
       </form>
 
       {freshToken && (
         <div className="mt-4 rounded-md border border-[#34d399]/40 bg-[#34d399]/10 p-4">
           <p className="text-sm font-semibold text-[#34d399]">
-            Token created — copy it now. It will never be shown again.
+            {labels.tokenCreated}
           </p>
           <div className="mt-2 flex items-center gap-2">
             <code className="flex-1 rounded bg-[#0b1220] border border-[#1d3a5f] px-3 py-2 text-xs text-[#a5e3ff] overflow-x-auto">
@@ -70,14 +75,14 @@ export function TokenManager({ tokens }: { tokens: Token[] }) {
               }}
               className="rounded-md border border-[#2b4f7c] px-3 py-2 text-xs text-[#e8f1ff] hover:bg-[#101f3a]"
             >
-              {copied ? "Copied!" : "Copy"}
+              {copied ? labels.copied : labels.copy}
             </button>
           </div>
         </div>
       )}
 
       <ul className="mt-6 flex flex-col gap-3">
-        {tokens.length === 0 && <li className="text-sm text-[#5a719c]">No tokens yet.</li>}
+        {tokens.length === 0 && <li className="text-sm text-[#5a719c]">{labels.noTokens}</li>}
         {tokens.map((t) => (
           <li
             key={t.id}

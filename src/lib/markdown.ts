@@ -16,8 +16,8 @@ export type ContentItem = {
   body: string;
 };
 
-function readDir(kind: "docs" | "blog"): ContentItem[] {
-  const dir = path.join(contentRoot, kind);
+function readDir(kind: "docs" | "blog", sub = ""): ContentItem[] {
+  const dir = path.join(contentRoot, kind, sub);
   if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)
@@ -36,12 +36,15 @@ function readDir(kind: "docs" | "blog"): ContentItem[] {
     });
 }
 
-export function getDocs(): ContentItem[] {
-  return readDir("docs").sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+export function getDocs(lang = "en"): ContentItem[] {
+  const base = readDir("docs").sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+  if (lang === "en") return base;
+  const localized = readDir("docs", lang);
+  return base.map((d) => localized.find((l) => l.slug === d.slug) ?? d);
 }
 
-export function getDoc(slug: string): ContentItem | undefined {
-  return getDocs().find((d) => d.slug === slug);
+export function getDoc(slug: string, lang = "en"): ContentItem | undefined {
+  return getDocs(lang).find((d) => d.slug === slug);
 }
 
 export function getPosts(): ContentItem[] {

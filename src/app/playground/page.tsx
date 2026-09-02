@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getLang, t } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "Playground",
@@ -9,34 +10,39 @@ const demos = [
   {
     src: "/playground/algorithm-explorer.html",
     title: "Algorithm Explorer",
-    desc: "图结构 / 查询传播 / Q值更新 — a guided walkthrough of the spreading-activation engine.",
+    descEn: "图结构 / 查询传播 / Q值更新 — a guided walkthrough of the spreading-activation engine.",
+    descZh: "图结构 / 查询传播 / Q值更新——扩散激活引擎的交互式漫游。",
   },
   {
     src: "/playground/architecture.html",
     title: "Architecture",
-    desc: "The full system diagram: MCP tools → gatekeeping → RRF fusion → hippocampus engine → SQLite.",
+    descEn: "The full system diagram: MCP tools → gatekeeping → RRF fusion → hippocampus engine → SQLite.",
+    descZh: "系统全景图：MCP 工具 → 写入门控 → RRF 融合 → 海马体引擎 → SQLite。",
   },
   {
     src: "/playground/dataflow-visualization.html",
     title: "Core Dataflow",
-    desc: "核心数据流可视化 — how a write becomes a typed edge and how a query traverses the graph.",
+    descEn: "核心数据流可视化 — how a write becomes a typed edge and how a query traverses the graph.",
+    descZh: "核心数据流可视化——一次写入如何成为类型化边、一次查询如何遍历全图。",
   },
 ];
 
-export default function Playground() {
+export default async function Playground() {
+  const lang = await getLang();
+  const d = t(lang);
+  const zh = lang === "zh";
+
   return (
     <div className="max-w-6xl mx-auto px-6 py-14">
-      <h1 className="text-3xl font-bold text-[#e8f1ff]">Playground</h1>
-      <p className="mt-2 text-[#93a7c4]">
-        Interactive explorations of the engine — no install required.
-      </p>
+      <h1 className="text-3xl font-bold text-[#e8f1ff]">{d.playgroundTitle}</h1>
+      <p className="mt-2 text-[#93a7c4]">{d.playgroundSub}</p>
       <div className="mt-10 flex flex-col gap-12">
-        {demos.map((d) => (
-          <section key={d.src}>
-            <h2 className="text-xl font-semibold text-[#e8f1ff]">{d.title}</h2>
-            <p className="mt-1 text-sm text-[#93a7c4]">{d.desc}</p>
+        {demos.map((demo) => (
+          <section key={demo.src}>
+            <h2 className="text-xl font-semibold text-[#e8f1ff]">{demo.title}</h2>
+            <p className="mt-1 text-sm text-[#93a7c4]">{zh ? demo.descZh : demo.descEn}</p>
             <div className="mt-4 rounded-xl border border-[#1d3a5f] overflow-hidden bg-[#0e1930]">
-              <iframe src={d.src} title={d.title} className="w-full h-[720px] border-0" />
+              <iframe src={demo.src} title={demo.title} className="w-full h-[720px] border-0" />
             </div>
           </section>
         ))}

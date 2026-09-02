@@ -2,20 +2,20 @@ import type { Metadata } from "next";
 import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { TokenManager } from "@/components/token-manager";
+import { getLang, t } from "@/lib/i18n";
 
 export const metadata: Metadata = { title: "Cloud Dashboard" };
 export const dynamic = "force-dynamic";
 
 export default async function Dashboard() {
-  const session = await auth();
+  const [session, lang] = await Promise.all([auth(), getLang()]);
+  const d = t(lang);
 
   if (!session?.user) {
     return (
       <div className="max-w-md mx-auto px-6 py-24 text-center">
-        <h1 className="text-2xl font-bold text-[#e8f1ff]">causal-memory Cloud</h1>
-        <p className="mt-3 text-sm text-[#93a7c4]">
-          Sign in with GitHub to get your personal API token for the hosted memory service.
-        </p>
+        <h1 className="text-2xl font-bold text-[#e8f1ff]">{d.cloudSigninTitle}</h1>
+        <p className="mt-3 text-sm text-[#93a7c4]">{d.cloudSigninSub}</p>
         <form
           action={async () => {
             "use server";
@@ -27,7 +27,7 @@ export default async function Dashboard() {
             type="submit"
             className="rounded-md bg-[#e8f1ff] px-5 py-2.5 text-sm font-semibold text-[#0b1220] hover:bg-white transition-colors"
           >
-            Sign in with GitHub
+            {d.signinGithub}
           </button>
         </form>
       </div>
@@ -44,9 +44,10 @@ export default async function Dashboard() {
     <div className="max-w-3xl mx-auto px-6 py-14">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#e8f1ff]">Cloud Dashboard</h1>
+          <h1 className="text-2xl font-bold text-[#e8f1ff]">{d.dashTitle}</h1>
           <p className="mt-1 text-sm text-[#93a7c4]">
-            Signed in as <span className="text-[#e8f1ff]">{session.user.name ?? session.user.email}</span>
+            {d.signedInAs}{" "}
+            <span className="text-[#e8f1ff]">{session.user.name ?? session.user.email}</span>
           </p>
         </div>
         <form
@@ -56,25 +57,34 @@ export default async function Dashboard() {
           }}
         >
           <button className="rounded-md border border-[#2b4f7c] px-3 py-1.5 text-xs text-[#93a7c4] hover:text-[#e8f1ff] transition-colors">
-            Sign out
+            {d.signOut}
           </button>
         </form>
       </div>
 
       <section className="mt-10">
-        <h2 className="text-lg font-semibold text-[#e8f1ff]">API tokens</h2>
-        <p className="mt-1 text-sm text-[#93a7c4]">
-          Tokens authenticate your agents against the hosted endpoint. Store them like passwords — we only keep a
-          hash.
-        </p>
+        <h2 className="text-lg font-semibold text-[#e8f1ff]">{d.apiTokens}</h2>
+        <p className="mt-1 text-sm text-[#93a7c4]">{d.tokenSub}</p>
         <div className="mt-4">
-          <TokenManager tokens={tokens.map((t) => ({ ...t, createdAt: t.createdAt.toISOString() }))} />
+          <TokenManager
+            tokens={tokens.map((tk) => ({ ...tk, createdAt: tk.createdAt.toISOString() }))}
+            labels={{
+              tokenName: d.tokenName,
+              createToken: d.createToken,
+              creating: d.creating,
+              tokenCreated: d.tokenCreated,
+              copy: d.copy,
+              copied: d.copied,
+              revoke: d.revoke,
+              noTokens: d.noTokens,
+            }}
+          />
         </div>
       </section>
 
       <section className="mt-10 rounded-xl border border-[#1d3a5f] bg-[#0e1930] p-6">
-        <h2 className="text-lg font-semibold text-[#e8f1ff]">Connect your agent</h2>
-        <p className="mt-1 text-sm text-[#93a7c4]">Point your MCP client at the cloud endpoint with your token:</p>
+        <h2 className="text-lg font-semibold text-[#e8f1ff]">{d.connectAgent}</h2>
+        <p className="mt-1 text-sm text-[#93a7c4]">{d.connectSub}</p>
         <pre className="mt-3 text-xs bg-[#0b1220] border border-[#1d3a5f] rounded-md p-4 overflow-x-auto text-[#a5e3ff]">
 {`{
   "mcpServers": {
@@ -85,9 +95,7 @@ export default async function Dashboard() {
   }
 }`}
         </pre>
-        <p className="mt-3 text-xs text-[#5a719c]">
-          The hosted endpoint is rolling out gradually — tokens created today will activate as capacity opens.
-        </p>
+        <p className="mt-3 text-xs text-[#5a719c]">{d.rolloutNote}</p>
       </section>
     </div>
   );
