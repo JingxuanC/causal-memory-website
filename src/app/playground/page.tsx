@@ -34,14 +34,14 @@ export default async function Playground() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-14">
-      <h1 className="text-3xl font-bold text-[#e8f1ff]">{d.playgroundTitle}</h1>
-      <p className="mt-2 text-[#93a7c4]">{d.playgroundSub}</p>
+      <h1 className="text-3xl font-bold text-[#0f172a]">{d.playgroundTitle}</h1>
+      <p className="mt-2 text-[#64748b]">{d.playgroundSub}</p>
       <div className="mt-10 flex flex-col gap-12">
         {demos.map((demo) => (
           <section key={demo.src}>
-            <h2 className="text-xl font-semibold text-[#e8f1ff]">{demo.title}</h2>
-            <p className="mt-1 text-sm text-[#93a7c4]">{zh ? demo.descZh : demo.descEn}</p>
-            <div className="mt-4 rounded-xl border border-[#1d3a5f] overflow-hidden bg-[#0e1930]">
+            <h2 className="text-xl font-semibold text-[#0f172a]">{demo.title}</h2>
+            <p className="mt-1 text-sm text-[#64748b]">{zh ? demo.descZh : demo.descEn}</p>
+            <div className="mt-4 rounded-xl border border-[#e2e8f0] overflow-hidden bg-[#f8fafc]">
               <iframe src={demo.src} title={demo.title} className="w-full h-[720px] border-0" />
             </div>
           </section>

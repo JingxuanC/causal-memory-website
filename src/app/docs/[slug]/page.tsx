@@ -1,11 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getDoc, getDocs, renderMarkdown } from "@/lib/markdown";
+import { getDoc, renderMarkdown } from "@/lib/markdown";
 import { getLang } from "@/lib/i18n";
 
-export function generateStaticParams() {
-  return getDocs().map((d) => ({ slug: d.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,

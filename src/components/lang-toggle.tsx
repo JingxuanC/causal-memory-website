@@ -19,7 +19,7 @@ export function LangToggle({ lang }: { lang: Lang }) {
           router.refresh();
         })
       }
-      className="rounded-md border border-[#2b4f7c] px-2.5 py-1.5 text-xs text-[#93a7c4] hover:text-[#e8f1ff] transition-colors"
+      className="rounded-md border border-[#cbd5e1] px-2.5 py-1.5 text-xs text-[#64748b] hover:text-[#0f172a] transition-colors"
       title="Switch language / 切换语言"
     >
       {lang === "en" ? "中文" : "EN"}

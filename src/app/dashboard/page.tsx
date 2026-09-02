@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { TokenManager } from "@/components/token-manager";
+import { PostEditor } from "@/components/post-editor";
+import { isAdmin } from "@/lib/admin";
 import { getLang, t } from "@/lib/i18n";
 
 export const metadata: Metadata = { title: "Cloud Dashboard" };
@@ -14,8 +16,8 @@ export default async function Dashboard() {
   if (!session?.user) {
     return (
       <div className="max-w-md mx-auto px-6 py-24 text-center">
-        <h1 className="text-2xl font-bold text-[#e8f1ff]">{d.cloudSigninTitle}</h1>
-        <p className="mt-3 text-sm text-[#93a7c4]">{d.cloudSigninSub}</p>
+        <h1 className="text-2xl font-bold text-[#0f172a]">{d.cloudSigninTitle}</h1>
+        <p className="mt-3 text-sm text-[#64748b]">{d.cloudSigninSub}</p>
         <form
           action={async () => {
             "use server";
@@ -25,7 +27,7 @@ export default async function Dashboard() {
         >
           <button
             type="submit"
-            className="rounded-md bg-[#e8f1ff] px-5 py-2.5 text-sm font-semibold text-[#0b1220] hover:bg-white transition-colors"
+            className="rounded-md bg-[#0f172a] px-5 py-2.5 text-sm font-semibold text-[#ffffff] hover:bg-[#1e293b] transition-colors"
           >
             {d.signinGithub}
           </button>
@@ -44,10 +46,10 @@ export default async function Dashboard() {
     <div className="max-w-3xl mx-auto px-6 py-14">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#e8f1ff]">{d.dashTitle}</h1>
-          <p className="mt-1 text-sm text-[#93a7c4]">
+          <h1 className="text-2xl font-bold text-[#0f172a]">{d.dashTitle}</h1>
+          <p className="mt-1 text-sm text-[#64748b]">
             {d.signedInAs}{" "}
-            <span className="text-[#e8f1ff]">{session.user.name ?? session.user.email}</span>
+            <span className="text-[#0f172a]">{session.user.name ?? session.user.email}</span>
           </p>
         </div>
         <form
@@ -56,15 +58,15 @@ export default async function Dashboard() {
             await signOut();
           }}
         >
-          <button className="rounded-md border border-[#2b4f7c] px-3 py-1.5 text-xs text-[#93a7c4] hover:text-[#e8f1ff] transition-colors">
+          <button className="rounded-md border border-[#cbd5e1] px-3 py-1.5 text-xs text-[#64748b] hover:text-[#0f172a] transition-colors">
             {d.signOut}
           </button>
         </form>
       </div>
 
       <section className="mt-10">
-        <h2 className="text-lg font-semibold text-[#e8f1ff]">{d.apiTokens}</h2>
-        <p className="mt-1 text-sm text-[#93a7c4]">{d.tokenSub}</p>
+        <h2 className="text-lg font-semibold text-[#0f172a]">{d.apiTokens}</h2>
+        <p className="mt-1 text-sm text-[#64748b]">{d.tokenSub}</p>
         <div className="mt-4">
           <TokenManager
             tokens={tokens.map((tk) => ({ ...tk, createdAt: tk.createdAt.toISOString() }))}
@@ -82,10 +84,24 @@ export default async function Dashboard() {
         </div>
       </section>
 
-      <section className="mt-10 rounded-xl border border-[#1d3a5f] bg-[#0e1930] p-6">
-        <h2 className="text-lg font-semibold text-[#e8f1ff]">{d.connectAgent}</h2>
-        <p className="mt-1 text-sm text-[#93a7c4]">{d.connectSub}</p>
-        <pre className="mt-3 text-xs bg-[#0b1220] border border-[#1d3a5f] rounded-md p-4 overflow-x-auto text-[#a5e3ff]">
+      {isAdmin(session) && (
+        <section className="mt-10">
+          <h2 className="text-lg font-semibold text-[#0f172a]">{d.newPost}</h2>
+          <p className="mt-1 mb-4 text-sm text-[#64748b]">{d.newPostSub}</p>
+          <PostEditor
+            labels={{
+              fieldTitle: d.fieldTitle, fieldSlug: d.fieldSlug, fieldDesc: d.fieldDesc,
+              fieldBody: d.fieldBody, publish: d.publish, publishing: d.publishing,
+              published: d.published,
+            }}
+          />
+        </section>
+      )}
+
+      <section className="mt-10 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-6">
+        <h2 className="text-lg font-semibold text-[#0f172a]">{d.connectAgent}</h2>
+        <p className="mt-1 text-sm text-[#64748b]">{d.connectSub}</p>
+        <pre className="mt-3 text-xs bg-[#ffffff] border border-[#e2e8f0] rounded-md p-4 overflow-x-auto text-[#0369a1]">
 {`{
   "mcpServers": {
     "causal-memory": {
@@ -95,7 +111,7 @@ export default async function Dashboard() {
   }
 }`}
         </pre>
-        <p className="mt-3 text-xs text-[#5a719c]">{d.rolloutNote}</p>
+        <p className="mt-3 text-xs text-[#94a3b8]">{d.rolloutNote}</p>
       </section>
     </div>
   );

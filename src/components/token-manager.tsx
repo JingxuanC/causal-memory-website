@@ -47,24 +47,24 @@ export function TokenManager({ tokens, labels }: { tokens: Token[]; labels: Labe
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder={labels.tokenName}
-          className="flex-1 rounded-md border border-[#2b4f7c] bg-[#0e1930] px-3 py-2 text-sm text-[#e8f1ff] placeholder-[#5a719c] focus:outline-none focus:border-[#4cc2ff]"
+          className="flex-1 rounded-md border border-[#cbd5e1] bg-[#f8fafc] px-3 py-2 text-sm text-[#0f172a] placeholder-[#94a3b8] focus:outline-none focus:border-[#0284c7]"
         />
         <button
           type="submit"
           disabled={pending}
-          className="rounded-md bg-[#4cc2ff] px-4 py-2 text-sm font-semibold text-[#0b1220] hover:bg-[#6fd0ff] disabled:opacity-50 transition-colors"
+          className="rounded-md bg-[#0284c7] px-4 py-2 text-sm font-semibold text-[#ffffff] hover:bg-[#0369a1] disabled:opacity-50 transition-colors"
         >
           {pending ? labels.creating : labels.createToken}
         </button>
       </form>
 
       {freshToken && (
-        <div className="mt-4 rounded-md border border-[#34d399]/40 bg-[#34d399]/10 p-4">
-          <p className="text-sm font-semibold text-[#34d399]">
+        <div className="mt-4 rounded-md border border-[#059669]/40 bg-[#059669]/10 p-4">
+          <p className="text-sm font-semibold text-[#059669]">
             {labels.tokenCreated}
           </p>
           <div className="mt-2 flex items-center gap-2">
-            <code className="flex-1 rounded bg-[#0b1220] border border-[#1d3a5f] px-3 py-2 text-xs text-[#a5e3ff] overflow-x-auto">
+            <code className="flex-1 rounded bg-[#ffffff] border border-[#e2e8f0] px-3 py-2 text-xs text-[#0369a1] overflow-x-auto">
               {freshToken}
             </code>
             <button
@@ -73,7 +73,7 @@ export function TokenManager({ tokens, labels }: { tokens: Token[]; labels: Labe
                 setCopied(true);
                 setTimeout(() => setCopied(false), 1500);
               }}
-              className="rounded-md border border-[#2b4f7c] px-3 py-2 text-xs text-[#e8f1ff] hover:bg-[#101f3a]"
+              className="rounded-md border border-[#cbd5e1] px-3 py-2 text-xs text-[#0f172a] hover:bg-[#f1f5f9]"
             >
               {copied ? labels.copied : labels.copy}
             </button>
@@ -82,21 +82,21 @@ export function TokenManager({ tokens, labels }: { tokens: Token[]; labels: Labe
       )}
 
       <ul className="mt-6 flex flex-col gap-3">
-        {tokens.length === 0 && <li className="text-sm text-[#5a719c]">{labels.noTokens}</li>}
+        {tokens.length === 0 && <li className="text-sm text-[#94a3b8]">{labels.noTokens}</li>}
         {tokens.map((t) => (
           <li
             key={t.id}
-            className="flex items-center justify-between rounded-md border border-[#1d3a5f] bg-[#0e1930] px-4 py-3"
+            className="flex items-center justify-between rounded-md border border-[#e2e8f0] bg-[#f8fafc] px-4 py-3"
           >
             <div>
-              <p className="text-sm font-medium text-[#e8f1ff]">{t.name}</p>
-              <p className="text-xs text-[#5a719c] font-mono">
+              <p className="text-sm font-medium text-[#0f172a]">{t.name}</p>
+              <p className="text-xs text-[#94a3b8] font-mono">
                 {t.prefix}… · created {t.createdAt.slice(0, 10)}
               </p>
             </div>
             <button
               onClick={() => revoke(t.id)}
-              className="rounded-md border border-[#f87171]/40 px-3 py-1.5 text-xs text-[#f87171] hover:bg-[#f87171]/10 transition-colors"
+              className="rounded-md border border-[#dc2626]/40 px-3 py-1.5 text-xs text-[#dc2626] hover:bg-[#dc2626]/10 transition-colors"
             >
               Revoke
             </button>

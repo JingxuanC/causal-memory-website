@@ -41,9 +41,9 @@ const capabilities: [string, string, string][] = [
 function Table({ head, rows, centers }: { head: string[]; rows: string[][]; centers?: number[] }) {
   const centerSet = new Set(centers ?? []);
   return (
-    <div className="rounded-xl border border-[#1d3a5f] overflow-hidden overflow-x-auto">
+    <div className="rounded-xl border border-[#e2e8f0] overflow-hidden overflow-x-auto">
       <table className="w-full text-sm min-w-[560px]">
-        <thead className="bg-[#101f3a] text-[#e8f1ff]">
+        <thead className="bg-[#f1f5f9] text-[#0f172a]">
           <tr>
             {head.map((h, i) => (
               <th key={h} className={`px-4 py-3 ${centerSet.has(i) ? "text-center" : "text-left"}`}>
@@ -54,16 +54,16 @@ function Table({ head, rows, centers }: { head: string[]; rows: string[][]; cent
         </thead>
         <tbody>
           {rows.map((r, ri) => (
-            <tr key={ri} className="border-t border-[#1d3a5f]">
+            <tr key={ri} className="border-t border-[#e2e8f0]">
               {r.map((c, i) => (
                 <td
                   key={i}
                   className={`px-4 py-2.5 ${
                     centerSet.has(i)
-                      ? `text-center ${i === 1 ? "font-semibold text-[#34d399]" : ""}`
+                      ? `text-center ${i === 1 ? "font-semibold text-[#059669]" : ""}`
                       : i === 0
                         ? "font-medium"
-                        : "text-[#93a7c4]"
+                        : "text-[#64748b]"
                   }`}
                 >
                   {c}
@@ -85,24 +85,24 @@ export default async function Benchmarks() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-14">
-      <h1 className="text-3xl font-bold text-[#e8f1ff]">{d.benchTitle}</h1>
-      <p className="mt-2 text-[#93a7c4]">
+      <h1 className="text-3xl font-bold text-[#0f172a]">{d.benchTitle}</h1>
+      <p className="mt-2 text-[#64748b]">
         {d.benchSub1}{" "}
-        <a href="https://github.com/JingxuanC/causal-memory/tree/main/benches" className="text-[#4cc2ff] hover:underline">
+        <a href="https://github.com/JingxuanC/causal-memory/tree/main/benches" className="text-[#0284c7] hover:underline">
           benches/
         </a>{" "}
         {d.benchSub2}{" "}
         <a
           href="https://github.com/JingxuanC/causal-memory/tree/main/docs/benchmarks"
-          className="text-[#4cc2ff] hover:underline"
+          className="text-[#0284c7] hover:underline"
         >
           docs/benchmarks
         </a>
         .
       </p>
 
-      <h2 className="mt-12 text-2xl font-bold text-[#e8f1ff]">{d.benchCausalTitle}</h2>
-      <p className="mt-2 text-sm text-[#93a7c4]">{d.benchCausalSub}</p>
+      <h2 className="mt-12 text-2xl font-bold text-[#0f172a]">{d.benchCausalTitle}</h2>
+      <p className="mt-2 text-sm text-[#64748b]">{d.benchCausalSub}</p>
       <div className="mt-4">
         <Table
           head={[d.capability, "causal-memory", "mem0", d.whatItTests]}
@@ -111,8 +111,8 @@ export default async function Benchmarks() {
         />
       </div>
 
-      <h2 className="mt-12 text-2xl font-bold text-[#e8f1ff]">{d.benchFactTitle}</h2>
-      <p className="mt-2 text-sm text-[#93a7c4]">{d.benchFactSub}</p>
+      <h2 className="mt-12 text-2xl font-bold text-[#0f172a]">{d.benchFactTitle}</h2>
+      <p className="mt-2 text-sm text-[#64748b]">{d.benchFactSub}</p>
       <div className="mt-4">
         <Table
           head={[d.benchmark, "causal-memory", "mem0", d.note]}
@@ -121,8 +121,8 @@ export default async function Benchmarks() {
         />
       </div>
 
-      <h2 className="mt-12 text-2xl font-bold text-[#e8f1ff]">{d.benchCapTitle}</h2>
-      <p className="mt-2 text-sm text-[#93a7c4]">{d.benchCapSub}</p>
+      <h2 className="mt-12 text-2xl font-bold text-[#0f172a]">{d.benchCapTitle}</h2>
+      <p className="mt-2 text-sm text-[#64748b]">{d.benchCapSub}</p>
       <div className="mt-4">
         <Table
           head={[d.capability, d.whatItProves]}

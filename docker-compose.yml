@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env
+    environment:
+      # SQLite lives on the data volume; override DATABASE_URL default
+      DATABASE_URL: "file:/app/data/prod.db"
+    volumes:
+      - ./data:/app/data          # SQLite database (users, tokens, comments)
+      - ./content:/app/content    # blog/docs markdown — drop a file in, it's live
+    restart: unless-stopped

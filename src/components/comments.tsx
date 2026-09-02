@@ -17,8 +17,8 @@ export async function Comments({ slug }: { slug: string }) {
   ]);
 
   return (
-    <section className="mt-14 border-t border-[#1d3a5f] pt-8">
-      <h2 className="text-xl font-semibold text-[#e8f1ff]">{d.comments} ({comments.length})</h2>
+    <section className="mt-14 border-t border-[#e2e8f0] pt-8">
+      <h2 className="text-xl font-semibold text-[#0f172a]">{d.comments} ({comments.length})</h2>
       <div className="mt-6">
         {session?.user ? (
           <CommentForm
@@ -26,8 +26,8 @@ export async function Comments({ slug }: { slug: string }) {
             labels={{ placeholder: d.commentPlaceholder, post: d.postComment, posting: d.posting }}
           />
         ) : (
-          <p className="text-sm text-[#93a7c4]">
-            <a href="/api/auth/signin" className="text-[#4cc2ff] hover:underline">
+          <p className="text-sm text-[#64748b]">
+            <a href="/api/auth/signin" className="text-[#0284c7] hover:underline">
               {d.signinGithub}
             </a>
             {d.signinToComment}
@@ -41,14 +41,14 @@ export async function Comments({ slug }: { slug: string }) {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={c.user.image} alt="" className="h-8 w-8 rounded-full" />
             ) : (
-              <div className="h-8 w-8 rounded-full bg-[#1d3a5f]" />
+              <div className="h-8 w-8 rounded-full bg-[#e2e8f0]" />
             )}
             <div className="min-w-0">
-              <p className="text-sm text-[#e8f1ff]">
+              <p className="text-sm text-[#0f172a]">
                 <span className="font-medium">{c.user.name ?? "GitHub user"}</span>{" "}
-                <span className="text-xs text-[#5a719c]">{c.createdAt.toISOString().slice(0, 10)}</span>
+                <span className="text-xs text-[#94a3b8]">{c.createdAt.toISOString().slice(0, 10)}</span>
               </p>
-              <p className="mt-1 text-sm text-[#c6d2e6] whitespace-pre-wrap break-words">{c.body}</p>
+              <p className="mt-1 text-sm text-[#334155] whitespace-pre-wrap break-words">{c.body}</p>
             </div>
           </li>
         ))}

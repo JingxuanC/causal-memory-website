@@ -66,6 +66,12 @@ const dict = {
     tokenCreated: "Token created — copy it now. It will never be shown again.",
     copy: "Copy", copied: "Copied!", revoke: "Revoke", noTokens: "No tokens yet.",
     benchmark: "Benchmark", note: "Note", whatItProves: "What it proves",
+    newPost: "New blog post",
+    newPostSub: "Markdown supported. Published immediately — no redeploy needed.",
+    fieldTitle: "Post title", fieldSlug: "URL slug (optional, derived from title)",
+    fieldDesc: "Description / summary",
+    fieldBody: "Body (markdown)…",
+    publish: "Publish", publishing: "Publishing…", published: "Live at",
   },
   zh: {
     navDocs: "文档", navBenchmarks: "基准测试", navPlayground: "在线演示",
@@ -125,6 +131,12 @@ const dict = {
     tokenCreated: "Token 已创建——请立即复制，之后将无法再次查看。",
     copy: "复制", copied: "已复制！", revoke: "吊销", noTokens: "暂无 token。",
     benchmark: "基准", note: "说明", whatItProves: "证明了什么",
+    newPost: "发布新文章",
+    newPostSub: "支持 Markdown。发布后立即生效——无需重新部署。",
+    fieldTitle: "文章标题", fieldSlug: "URL slug（可选，默认由标题生成）",
+    fieldDesc: "摘要描述",
+    fieldBody: "正文（Markdown）…",
+    publish: "发布", publishing: "发布中…", published: "已上线",
   },
 } as const;
 

@@ -31,26 +31,26 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={lang === "zh" ? "zh-CN" : "en"} className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <header className="border-b border-[#1d3a5f] sticky top-0 z-40 bg-[#0b1220]/90 backdrop-blur">
+        <header className="border-b border-[#e2e8f0] sticky top-0 z-40 bg-[#ffffff]/90 backdrop-blur">
           <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-            <Link href="/" className="font-bold text-[#e8f1ff] tracking-tight">
-              causal<span className="text-[#4cc2ff]">-memory</span>
+            <Link href="/" className="font-bold text-[#0f172a] tracking-tight">
+              causal<span className="text-[#0284c7]">-memory</span>
             </Link>
-            <nav className="hidden md:flex items-center gap-6 text-sm text-[#93a7c4]">
+            <nav className="hidden md:flex items-center gap-6 text-sm text-[#64748b]">
               {nav.map((n) => (
-                <Link key={n.href} href={n.href} className="hover:text-[#e8f1ff] transition-colors">
+                <Link key={n.href} href={n.href} className="hover:text-[#0f172a] transition-colors">
                   {n.label}
                 </Link>
               ))}
             </nav>
             <div className="flex items-center gap-3 text-sm">
               <LangToggle lang={lang} />
-              <Link href="/dashboard" className="text-[#93a7c4] hover:text-[#e8f1ff] transition-colors">
+              <Link href="/dashboard" className="text-[#64748b] hover:text-[#0f172a] transition-colors">
                 {d.navCloud}
               </Link>
               <a
                 href="https://github.com/JingxuanC/causal-memory"
-                className="rounded-md border border-[#2b4f7c] px-3 py-1.5 text-[#e8f1ff] hover:bg-[#101f3a] transition-colors"
+                className="rounded-md border border-[#cbd5e1] px-3 py-1.5 text-[#0f172a] hover:bg-[#f1f5f9] transition-colors"
               >
                 GitHub
               </a>
@@ -58,10 +58,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
         </header>
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-[#1d3a5f] py-8 text-center text-sm text-[#5a719c]">
+        <footer className="border-t border-[#e2e8f0] py-8 text-center text-sm text-[#94a3b8]">
           <p>
             Apache-2.0 ·{" "}
-            <a href="https://github.com/JingxuanC/causal-memory" className="hover:text-[#93a7c4]">
+            <a href="https://github.com/JingxuanC/causal-memory" className="hover:text-[#64748b]">
               github.com/JingxuanC/causal-memory
             </a>
           </p>

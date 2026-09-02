@@ -31,8 +31,8 @@ const evalRows: [string, string, string, string, string][] = [
   ["Overall", "78%", "65%", "CausalEval v13 · 140 questions, 20 graphs", "CausalEval v13 · 140 题、20 张图"],
 ];
 
-const Check = () => <span className="text-[#34d399]">✅</span>;
-const Cross = () => <span className="text-[#f87171]">❌</span>;
+const Check = () => <span className="text-[#059669]">✅</span>;
+const Cross = () => <span className="text-[#dc2626]">❌</span>;
 
 export default async function Home() {
   const lang = await getLang();
@@ -64,28 +64,28 @@ export default async function Home() {
     <div>
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-20 pb-16 text-center">
-        <p className="text-sm font-mono text-[#4cc2ff] mb-4">{d.heroKicker}</p>
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-[#e8f1ff] leading-tight">
+        <p className="text-sm font-mono text-[#0284c7] mb-4">{d.heroKicker}</p>
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-[#0f172a] leading-tight">
           {d.heroTitleA}
           <br />
-          <span className="text-[#4cc2ff]">{d.heroTitleB}</span>
+          <span className="text-[#0284c7]">{d.heroTitleB}</span>
         </h1>
-        <p className="mt-6 text-lg text-[#93a7c4] max-w-2xl mx-auto">{d.heroSub}</p>
+        <p className="mt-6 text-lg text-[#64748b] max-w-2xl mx-auto">{d.heroSub}</p>
         <div className="mt-8 flex items-center justify-center gap-4">
           <Link
             href="/docs/getting-started"
-            className="rounded-md bg-[#4cc2ff] px-5 py-2.5 font-semibold text-[#0b1220] hover:bg-[#6fd0ff] transition-colors"
+            className="rounded-md bg-[#0284c7] px-5 py-2.5 font-semibold text-[#ffffff] hover:bg-[#0369a1] transition-colors"
           >
             {d.getStarted}
           </Link>
           <Link
             href="/dashboard"
-            className="rounded-md border border-[#2b4f7c] px-5 py-2.5 font-semibold text-[#e8f1ff] hover:bg-[#101f3a] transition-colors"
+            className="rounded-md border border-[#cbd5e1] px-5 py-2.5 font-semibold text-[#0f172a] hover:bg-[#f1f5f9] transition-colors"
           >
             {d.tryCloud}
           </Link>
         </div>
-        <div className="mt-12 mx-auto max-w-3xl rounded-xl border border-[#1d3a5f] overflow-hidden bg-[#0e1930]">
+        <div className="mt-12 mx-auto max-w-3xl rounded-xl border border-[#e2e8f0] overflow-hidden bg-[#f8fafc]">
           <video
             src="/demo/causal-memory-danger-30s.mp4"
             poster="/demo/demo30_danger.png"
@@ -95,20 +95,20 @@ export default async function Home() {
             playsInline
             className="w-full"
           />
-          <p className="text-xs text-[#5a719c] py-2">{d.demoCaption}</p>
+          <p className="text-xs text-[#94a3b8] py-2">{d.demoCaption}</p>
         </div>
       </section>
 
       {/* Compaction survival */}
-      <section className="border-t border-[#1d3a5f] bg-[#0e1930]/50">
+      <section className="border-t border-[#e2e8f0] bg-[#f8fafc]/50">
         <div className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <h2 className="text-3xl font-bold text-[#e8f1ff]">{d.compactionTitle}</h2>
-            <p className="mt-4 text-[#93a7c4]">{d.compactionBody}</p>
+            <h2 className="text-3xl font-bold text-[#0f172a]">{d.compactionTitle}</h2>
+            <p className="mt-4 text-[#64748b]">{d.compactionBody}</p>
           </div>
-          <div className="rounded-xl border border-[#1d3a5f] overflow-hidden">
+          <div className="rounded-xl border border-[#e2e8f0] overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-[#101f3a] text-[#e8f1ff]">
+              <thead className="bg-[#f1f5f9] text-[#0f172a]">
                 <tr>
                   <th className="px-4 py-3 text-left">{d.compactionK}</th>
                   <th className="px-4 py-3 text-left">{d.compactionText}</th>
@@ -117,10 +117,10 @@ export default async function Home() {
               </thead>
               <tbody>
                 {compaction.map((r) => (
-                  <tr key={r.k} className="border-t border-[#1d3a5f]">
+                  <tr key={r.k} className="border-t border-[#e2e8f0]">
                     <td className="px-4 py-2.5">{r.k}</td>
-                    <td className={`px-4 py-2.5 ${r.k >= 3 ? "text-[#f87171] font-semibold" : ""}`}>{r.text}</td>
-                    <td className="px-4 py-2.5 text-[#34d399] font-semibold">{r.causal}</td>
+                    <td className={`px-4 py-2.5 ${r.k >= 3 ? "text-[#dc2626] font-semibold" : ""}`}>{r.text}</td>
+                    <td className="px-4 py-2.5 text-[#059669] font-semibold">{r.causal}</td>
                   </tr>
                 ))}
               </tbody>
@@ -131,14 +131,14 @@ export default async function Home() {
 
       {/* Capability matrix */}
       <section className="max-w-6xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-[#e8f1ff] text-center">{d.matrixTitle}</h2>
-        <p className="mt-3 text-center text-[#93a7c4]">{d.matrixSub}</p>
-        <div className="mt-8 rounded-xl border border-[#1d3a5f] overflow-hidden overflow-x-auto">
+        <h2 className="text-3xl font-bold text-[#0f172a] text-center">{d.matrixTitle}</h2>
+        <p className="mt-3 text-center text-[#64748b]">{d.matrixSub}</p>
+        <div className="mt-8 rounded-xl border border-[#e2e8f0] overflow-hidden overflow-x-auto">
           <table className="w-full text-sm min-w-[640px]">
-            <thead className="bg-[#101f3a] text-[#e8f1ff]">
+            <thead className="bg-[#f1f5f9] text-[#0f172a]">
               <tr>
                 <th className="px-4 py-3 text-left">{d.capability}</th>
-                <th className="px-4 py-3 text-center text-[#4cc2ff]">causal-memory</th>
+                <th className="px-4 py-3 text-center text-[#0284c7]">causal-memory</th>
                 <th className="px-4 py-3 text-center">mem0</th>
                 <th className="px-4 py-3 text-center">Zep</th>
                 <th className="px-4 py-3 text-center">Letta</th>
@@ -146,7 +146,7 @@ export default async function Home() {
             </thead>
             <tbody>
               {matrix.map(([en, zhText, cm, m0, zep, letta]) => (
-                <tr key={en} className="border-t border-[#1d3a5f]">
+                <tr key={en} className="border-t border-[#e2e8f0]">
                   <td className="px-4 py-2.5">{zh ? zhText : en}</td>
                   <td className="px-4 py-2.5 text-center">{cm ? <Check /> : <Cross />}</td>
                   <td className="px-4 py-2.5 text-center">{m0 ? <Check /> : <Cross />}</td>
@@ -160,34 +160,34 @@ export default async function Home() {
       </section>
 
       {/* CausalEval */}
-      <section className="border-t border-[#1d3a5f] bg-[#0e1930]/50">
+      <section className="border-t border-[#e2e8f0] bg-[#f8fafc]/50">
         <div className="max-w-6xl mx-auto px-6 py-16">
-          <h2 className="text-3xl font-bold text-[#e8f1ff] text-center">{d.evalTitle}</h2>
-          <p className="mt-3 text-center text-[#93a7c4]">{d.evalSub}</p>
-          <div className="mt-8 rounded-xl border border-[#1d3a5f] overflow-hidden overflow-x-auto">
+          <h2 className="text-3xl font-bold text-[#0f172a] text-center">{d.evalTitle}</h2>
+          <p className="mt-3 text-center text-[#64748b]">{d.evalSub}</p>
+          <div className="mt-8 rounded-xl border border-[#e2e8f0] overflow-hidden overflow-x-auto">
             <table className="w-full text-sm min-w-[640px]">
-              <thead className="bg-[#101f3a] text-[#e8f1ff]">
+              <thead className="bg-[#f1f5f9] text-[#0f172a]">
                 <tr>
                   <th className="px-4 py-3 text-left">{d.capability}</th>
-                  <th className="px-4 py-3 text-center text-[#4cc2ff]">causal-memory</th>
+                  <th className="px-4 py-3 text-center text-[#0284c7]">causal-memory</th>
                   <th className="px-4 py-3 text-center">mem0</th>
                   <th className="px-4 py-3 text-left">{d.whatItTests}</th>
                 </tr>
               </thead>
               <tbody>
                 {evalRows.map(([cap, cm, m0, what, whatZh]) => (
-                  <tr key={cap} className="border-t border-[#1d3a5f]">
+                  <tr key={cap} className="border-t border-[#e2e8f0]">
                     <td className="px-4 py-2.5 font-medium">{cap}</td>
-                    <td className="px-4 py-2.5 text-center font-semibold text-[#34d399]">{cm}</td>
+                    <td className="px-4 py-2.5 text-center font-semibold text-[#059669]">{cm}</td>
                     <td className="px-4 py-2.5 text-center">{m0}</td>
-                    <td className="px-4 py-2.5 text-[#93a7c4]">{zh ? whatZh : what}</td>
+                    <td className="px-4 py-2.5 text-[#64748b]">{zh ? whatZh : what}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p className="mt-4 text-center">
-            <Link href="/benchmarks" className="text-[#4cc2ff] hover:underline">
+            <Link href="/benchmarks" className="text-[#0284c7] hover:underline">
               {d.fullReport}
             </Link>
           </p>
@@ -196,21 +196,21 @@ export default async function Home() {
 
       {/* Quickstart */}
       <section className="max-w-6xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-[#e8f1ff] text-center">{d.quickTitle}</h2>
+        <h2 className="text-3xl font-bold text-[#0f172a] text-center">{d.quickTitle}</h2>
         <div className="mt-10 grid md:grid-cols-3 gap-6">
           {steps.map((s) => (
-            <div key={s.n} className="rounded-xl border border-[#1d3a5f] bg-[#0e1930] p-6">
-              <p className="text-[#4cc2ff] font-mono text-sm">{d.step} {s.n}{zh ? " 步" : ""}</p>
-              <h3 className="mt-1 text-lg font-semibold text-[#e8f1ff]">{s.title}</h3>
-              <pre className="mt-3 text-xs bg-[#0b1220] border border-[#1d3a5f] rounded-md p-3 overflow-x-auto text-[#a5e3ff]">
+            <div key={s.n} className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-6">
+              <p className="text-[#0284c7] font-mono text-sm">{d.step} {s.n}{zh ? " 步" : ""}</p>
+              <h3 className="mt-1 text-lg font-semibold text-[#0f172a]">{s.title}</h3>
+              <pre className="mt-3 text-xs bg-[#ffffff] border border-[#e2e8f0] rounded-md p-3 overflow-x-auto text-[#0369a1]">
                 {s.code}
               </pre>
-              <p className="mt-2 text-xs text-[#5a719c]">{s.note}</p>
+              <p className="mt-2 text-xs text-[#94a3b8]">{s.note}</p>
             </div>
           ))}
         </div>
         <p className="mt-8 text-center">
-          <Link href="/docs/getting-started" className="text-[#4cc2ff] hover:underline">
+          <Link href="/docs/getting-started" className="text-[#0284c7] hover:underline">
             {d.readGuide}
           </Link>
         </p>

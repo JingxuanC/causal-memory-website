@@ -61,23 +61,23 @@ export default async function Pricing() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-14">
-      <h1 className="text-3xl font-bold text-[#e8f1ff] text-center">{d.pricingTitle}</h1>
-      <p className="mt-2 text-center text-[#93a7c4]">{d.pricingSub}</p>
+      <h1 className="text-3xl font-bold text-[#0f172a] text-center">{d.pricingTitle}</h1>
+      <p className="mt-2 text-center text-[#64748b]">{d.pricingSub}</p>
       <div className="mt-12 grid md:grid-cols-3 gap-6">
         {tiers.map((tier) => (
           <div
             key={tier.name}
             className={`rounded-xl border p-6 flex flex-col ${
-              tier.cta.primary ? "border-[#4cc2ff] bg-[#0e1930]" : "border-[#1d3a5f] bg-[#0e1930]/50"
+              tier.cta.primary ? "border-[#0284c7] bg-[#f8fafc]" : "border-[#e2e8f0] bg-[#f8fafc]/50"
             }`}
           >
-            <h2 className="text-lg font-semibold text-[#e8f1ff]">{tier.name}</h2>
-            <p className="mt-1 text-2xl font-bold text-[#4cc2ff]">{tier.price[li]}</p>
-            <p className="mt-1 text-sm text-[#93a7c4]">{tier.tagline[li]}</p>
-            <ul className="mt-5 flex-1 flex flex-col gap-2 text-sm text-[#c6d2e6]">
+            <h2 className="text-lg font-semibold text-[#0f172a]">{tier.name}</h2>
+            <p className="mt-1 text-2xl font-bold text-[#0284c7]">{tier.price[li]}</p>
+            <p className="mt-1 text-sm text-[#64748b]">{tier.tagline[li]}</p>
+            <ul className="mt-5 flex-1 flex flex-col gap-2 text-sm text-[#334155]">
               {tier.features.map((f) => (
                 <li key={f[0]} className="flex gap-2">
-                  <span className="text-[#34d399] shrink-0">✓</span>
+                  <span className="text-[#059669] shrink-0">✓</span>
                   {f[li]}
                 </li>
               ))}
@@ -86,8 +86,8 @@ export default async function Pricing() {
               href={tier.cta.href}
               className={`mt-6 rounded-md px-4 py-2 text-center text-sm font-semibold transition-colors ${
                 tier.cta.primary
-                  ? "bg-[#4cc2ff] text-[#0b1220] hover:bg-[#6fd0ff]"
-                  : "border border-[#2b4f7c] text-[#e8f1ff] hover:bg-[#101f3a]"
+                  ? "bg-[#0284c7] text-[#ffffff] hover:bg-[#0369a1]"
+                  : "border border-[#cbd5e1] text-[#0f172a] hover:bg-[#f1f5f9]"
               }`}
             >
               {tier.cta.label[li]}

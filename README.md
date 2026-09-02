@@ -41,9 +41,29 @@ For production, create a second OAuth App with the production domain and set the
 
 See [.env.example](.env.example). `DATABASE_URL` defaults to SQLite (`file:./dev.db`); for production use Postgres (Neon / Vercel Postgres) and update `prisma/schema.prisma`'s datasource provider accordingly.
 
-## Deployment
+## Docker deployment (self-hosted server)
 
-Optimized for Vercel (zero config). Also works self-hosted via `npm run build && npm start` — keep `AUTH_TRUST_HOST=true` set outside Vercel.
+```bash
+cp .env.example .env   # fill AUTH_SECRET, AUTH_GITHUB_ID/SECRET, ADMIN_EMAILS, AUTH_URL
+docker compose up -d --build
+```
+
+- SQLite data persists in `./data` (volume → `/app/data`)
+- Blog/docs markdown lives in `./content` (volume → `/app/content`) — **dropping a new `.md` file into `content/blog/` publishes it immediately, no rebuild/restart**
+- Admins (emails in `ADMIN_EMAILS`) can also publish posts from the browser at `/dashboard`
+- Schema setup runs automatically on container start (`prisma db push`)
+
+Put Caddy or nginx in front for TLS:
+
+```
+# Caddyfile
+your-domain.com {
+    reverse_proxy localhost:3000
+}
+```
+
+Remember to create a production GitHub OAuth App whose callback URL is
+`https://your-domain.com/api/auth/callback/github`, and set `AUTH_URL=https://your-domain.com`.
 
 ## Content editing
 

@@ -1,11 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getPost, getPosts, renderMarkdown } from "@/lib/markdown";
+import { getPost, renderMarkdown } from "@/lib/markdown";
 import { Comments } from "@/components/comments";
 
-export function generateStaticParams() {
-  return getPosts().map((p) => ({ slug: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -24,7 +22,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
   const html = await renderMarkdown(post.body);
   return (
     <div className="max-w-3xl mx-auto px-6 py-14">
-      <p className="text-xs font-mono text-[#5a719c]">{post.date}</p>
+      <p className="text-xs font-mono text-[#94a3b8]">{post.date}</p>
       <article className="prose-cm mt-4" dangerouslySetInnerHTML={{ __html: html }} />
       <Comments slug={slug} />
     </div>
