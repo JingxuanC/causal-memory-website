@@ -27,6 +27,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     { href: "/blog", label: d.navBlog },
     { href: "/pricing", label: d.navPricing },
   ];
+  const hubHref = "/hub/";
 
   return (
     <html lang={lang === "zh" ? "zh-CN" : "en"} className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
@@ -42,6 +43,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   {n.label}
                 </Link>
               ))}
+              <a href={hubHref} target="_blank" rel="noopener" className="hover:text-[#0f172a] transition-colors">
+                {d.navHub}
+              </a>
             </nav>
             <div className="flex items-center gap-3 text-sm">
               <LangToggle lang={lang} />
