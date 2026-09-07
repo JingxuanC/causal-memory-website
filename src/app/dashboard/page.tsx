@@ -105,13 +105,12 @@ export default async function Dashboard() {
 {`{
   "mcpServers": {
     "causal-memory": {
-      "url": "https://cloud.causal-memory.dev/mcp",
+      "url": "https://causal-memory.com/memory/mcp",
       "headers": { "Authorization": "Bearer cm_your_token" }
     }
   }
 }`}
         </pre>
-        <p className="mt-3 text-xs text-[#94a3b8]">{d.rolloutNote}</p>
       </section>
     </div>
   );
