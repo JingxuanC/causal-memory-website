@@ -27,6 +27,10 @@ export async function Comments({ slug }: { slug: string }) {
           />
         ) : (
           <p className="text-sm text-[#64748b]">
+            {/* Full-page navigation on purpose: /api/auth/signin is a next-auth route
+                handler that 302s to the provider. <Link> does client-side routing and
+                cannot follow a route handler's redirect. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/api/auth/signin" className="text-[#0284c7] hover:underline">
               {d.signinGithub}
             </a>
