@@ -10,7 +10,7 @@ export async function getLang(): Promise<Lang> {
 const dict = {
   en: {
     navDocs: "Docs", navBenchmarks: "Benchmarks", navPlayground: "Playground",
-    navBlog: "Blog", navPricing: "Pricing", navHub: "MCP Hub", navCloud: "Cloud",
+    navBlog: "Blog", navPricing: "Pricing", navApply: "Get API key", navHub: "MCP Hub", navCloud: "Cloud",
     heroKicker: "Apache-2.0 · Rust + SQLite · MCP",
     heroTitleA: "Agent memory with a causal core.",
     heroTitleB: "The only one that models inhibition.",
@@ -74,7 +74,7 @@ const dict = {
   },
   zh: {
     navDocs: "文档", navBenchmarks: "基准测试", navPlayground: "在线演示",
-    navBlog: "博客", navPricing: "定价", navHub: "MCP Hub", navCloud: "云服务",
+    navBlog: "博客", navPricing: "定价", navApply: "申请 Key", navHub: "MCP Hub", navCloud: "云服务",
     heroKicker: "Apache-2.0 · Rust + SQLite · MCP",
     heroTitleA: "拥有因果内核的 Agent 记忆系统。",
     heroTitleB: "唯一建模「抑制」的记忆系统。",

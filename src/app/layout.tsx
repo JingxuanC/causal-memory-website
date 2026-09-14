@@ -26,6 +26,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     { href: "/playground", label: d.navPlayground },
     { href: "/blog", label: d.navBlog },
     { href: "/pricing", label: d.navPricing },
+    { href: "/apply", label: d.navApply },
   ];
   const hubHref = "/hub/";
 
