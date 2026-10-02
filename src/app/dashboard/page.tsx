@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { TokenManager } from "@/components/token-manager";
+import { ByokManager } from "@/components/byok-manager";
 import { PostEditor } from "@/components/post-editor";
 import { isAdmin } from "@/lib/admin";
 import { getLang, t } from "@/lib/i18n";
@@ -41,6 +43,10 @@ export default async function Dashboard() {
     select: { id: true, name: true, prefix: true, createdAt: true },
     orderBy: { createdAt: "desc" },
   });
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { plan: true, byokKeyHint: true },
+  });
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-14">
@@ -64,6 +70,16 @@ export default async function Dashboard() {
         </form>
       </div>
 
+      <section className="mt-10 flex items-center justify-between rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-6 py-4">
+        <p className="text-sm text-[#334155]">
+          {d.currentPlan}:{" "}
+          <span className="font-semibold text-[#0f172a] capitalize">{user?.plan ?? "free"}</span>
+        </p>
+        <Link href="/pricing" className="text-sm font-semibold text-[#0284c7] hover:text-[#0369a1]">
+          {d.planUpgrade}
+        </Link>
+      </section>
+
       <section className="mt-10">
         <h2 className="text-lg font-semibold text-[#0f172a]">{d.apiTokens}</h2>
         <p className="mt-1 text-sm text-[#64748b]">{d.tokenSub}</p>
@@ -79,6 +95,26 @@ export default async function Dashboard() {
               copied: d.copied,
               revoke: d.revoke,
               noTokens: d.noTokens,
+            }}
+          />
+        </div>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-lg font-semibold text-[#0f172a]">{d.byokTitle}</h2>
+        <p className="mt-1 text-sm text-[#64748b]">{d.byokSub}</p>
+        <div className="mt-4">
+          <ByokManager
+            hint={user?.byokKeyHint ?? null}
+            labels={{
+              byokPlaceholder: d.byokPlaceholder,
+              byokSave: d.byokSave,
+              byokSaving: d.byokSaving,
+              byokSaved: d.byokSaved,
+              byokClear: d.byokClear,
+              byokCurrent: d.byokCurrent,
+              byokNone: d.byokNone,
+              byokError: d.byokError,
             }}
           />
         </div>

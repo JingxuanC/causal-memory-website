@@ -8,15 +8,22 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  apiTokens     ApiToken[]
-  comments      Comment[]
+  id                String    @id @default(cuid())
+  name              String?
+  email             String?   @unique
+  emailVerified     DateTime?
+  image             String?
+  // Cloud plan (productization §2.3): free | pro | team | enterprise.
+  plan              String    @default("free")
+  // BYOK LLM key (productization §3.5): AES-256-GCM ciphertext at rest
+  // (see src/lib/crypto.ts); hint is a display-only fingerprint
+  // ("sk-...ab12") so the dashboard can show which key is set.
+  byokKeyCiphertext String?
+  byokKeyHint       String?
+  accounts          Account[]
+  sessions          Session[]
+  apiTokens         ApiToken[]
+  comments          Comment[]
 }
 
 model Account {
