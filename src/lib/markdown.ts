@@ -16,7 +16,7 @@ export type ContentItem = {
   body: string;
 };
 
-function readDir(kind: "docs" | "blog", sub = ""): ContentItem[] {
+function readDir(kind: "docs" | "blog" | "book", sub = ""): ContentItem[] {
   const dir = path.join(contentRoot, kind, sub);
   if (!fs.existsSync(dir)) return [];
   return fs
@@ -26,7 +26,9 @@ function readDir(kind: "docs" | "blog", sub = ""): ContentItem[] {
       const raw = fs.readFileSync(path.join(dir, f), "utf8");
       const { data, content } = matter(raw);
       return {
-        slug: f.replace(/\.md$/, ""),
+        // Node's readdir returns NFD-normalized names on macOS; URL params
+        // are NFC. Normalize so CJK slugs (book chapters) match.
+        slug: f.replace(/\.md$/, "").normalize("NFC"),
         title: String(data.title ?? f),
         description: String(data.description ?? ""),
         date: data.date ? String(data.date) : undefined,
@@ -53,6 +55,14 @@ export function getPosts(): ContentItem[] {
 
 export function getPost(slug: string): ContentItem | undefined {
   return getPosts().find((p) => p.slug === slug);
+}
+
+export function getChapters(): ContentItem[] {
+  return readDir("book").sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+}
+
+export function getChapter(slug: string): ContentItem | undefined {
+  return getChapters().find((c) => c.slug === slug);
 }
 
 export async function renderMarkdown(md: string): Promise<string> {

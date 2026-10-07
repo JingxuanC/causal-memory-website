@@ -25,6 +25,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     { href: "/benchmarks", label: d.navBenchmarks },
     { href: "/playground", label: d.navPlayground },
     { href: "/blog", label: d.navBlog },
+    { href: "/book", label: d.navBook },
     { href: "/pricing", label: d.navPricing },
     { href: "/apply", label: d.navApply },
   ];

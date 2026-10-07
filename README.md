@@ -13,6 +13,7 @@ Official website for [causal-memory](https://github.com/JingxuanC/causal-memory)
 | `/benchmarks` | CausalEval + fact-recall + capability test results |
 | `/playground` | Interactive engine visualizations (iframes from `public/playground/`) |
 | `/blog/*` | Blog posts (markdown in `content/blog/`) with comments (GitHub sign-in required) |
+| `/book/*` | 《高性价比人生指南》online reading (markdown in `content/book/`, CC BY 4.0 from [eternity4719/HowToLiveBetter](https://github.com/eternity4719/HowToLiveBetter)) with per-chapter comments and AI chat (sign-in required; user's BYOK key, or deployment-level `AI_API_KEY`) |
 | `/pricing` | Open-core tiers: Community / Cloud / Enterprise |
 | `/dashboard` | Cloud dashboard — GitHub sign-in, personal API token create/revoke |
 
