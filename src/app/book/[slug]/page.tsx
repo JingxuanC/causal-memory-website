@@ -43,7 +43,7 @@ export default async function BookChapter({ params }: { params: Promise<{ slug: 
   const html = await renderMarkdown(chapter.body);
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-14">
+    <div className="max-w-3xl mx-auto py-10">
       <p className="text-sm">
         <Link href="/book" className="text-[#0284c7] hover:underline">
           ← {d.bookTitle}

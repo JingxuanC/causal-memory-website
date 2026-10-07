@@ -13,7 +13,7 @@ export default async function BookIndex() {
   const d = t(lang);
   const chapters = getChapters();
   return (
-    <div className="max-w-3xl mx-auto px-6 py-14">
+    <div className="max-w-3xl mx-auto py-10">
       <h1 className="text-3xl font-bold text-[#0f172a]">{d.bookTitle}</h1>
       <p className="mt-3 text-[#64748b] leading-relaxed">{d.bookSub}</p>
       <p className="mt-3 text-sm text-[#94a3b8]">
