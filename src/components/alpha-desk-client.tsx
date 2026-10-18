@@ -11,7 +11,9 @@ const T = {
     freeBody:
       "预构建的 DeepSeek Harness profile：4 个金融 Bot、35 个技能、行情中心/仪表盘、6 种研究报告。安装不需要 pnpm。",
     download: "下载安装包",
-    version: "0.1.2-dev · macOS / Linux · 需要 DSH 0.2 + Python 3.11",
+    downloadSkill: "下载安装 Skill",
+    downloadSkillHint: "把 zip 解压到 DSH 的 skills 目录，然后对 DSH 说“安装 Alpha Desk”。",
+    version: "0.1.3-dev · macOS（Apple Silicon）· 需要 DSH 0.2 + Python 3.11",
     proBadge: "PRO",
     proTitle: "申请 Pro license",
     proBody:
@@ -51,7 +53,9 @@ const T = {
     freeBody:
       "A prebuilt DeepSeek Harness profile: 4 finance Bots, 35 skills, market panel/dashboard, and 6 report types. No pnpm install required.",
     download: "Download package",
-    version: "0.1.2-dev · macOS / Linux · DSH 0.2 + Python 3.11",
+    downloadSkill: "Download install skill",
+    downloadSkillHint: "Unzip into your DSH skills folder, then tell DSH: “install Alpha Desk”.",
+    version: "0.1.3-dev · macOS (Apple Silicon) · DSH 0.2 + Python 3.11",
     proBadge: "PRO",
     proTitle: "Apply for a Pro license",
     proBody:
@@ -226,10 +230,16 @@ export function AlphaDeskClient({ lang }: { lang: Lang }) {
             <h2 className="text-lg font-semibold text-[#0f172a]">{t.freeTitle}</h2>
           </div>
           <p className="mt-2 text-sm text-[#475569]">{t.freeBody}</p>
-          <a href="/api/alpha-desk/download" className={`${cls.btn} mt-5 inline-block`}>
-            {t.download}
-          </a>
-          <p className="mt-3 text-xs text-[#94a3b8]">{t.version}</p>
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <a href="/api/alpha-desk/download" className={cls.btn}>
+              {t.download}
+            </a>
+            <a href="/api/alpha-desk/skill" className={cls.btnGhost}>
+              {t.downloadSkill}
+            </a>
+          </div>
+          <p className="mt-2 text-xs text-[#64748b]">{t.downloadSkillHint}</p>
+          <p className="mt-1 text-xs text-[#94a3b8]">{t.version}</p>
         </section>
 
         <section className={`${cls.card} border-[#0284c7] bg-[#f8fafc]`}>
