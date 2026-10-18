@@ -69,6 +69,30 @@ Mount it read-only; do not commit it. Offline licenses cannot be revoked, so a
 leaked signing key is equivalent to a leaked license mint. If that risk is not
 acceptable, replace the claim route with a manual signing step.
 
+Deploy on the host that serves causal-memory.com:
+
+```bash
+# local: upload the release and the signing keypair
+scp alpha-desk-0.1.2-dev.zip root@47.90.253.85:/opt/causal-memory-website/data/
+scp ec-private.pem root@47.90.253.85:/opt/causal-memory-website/secrets/alpha-license-private.pem
+scp public.pem   root@47.90.253.85:/opt/causal-memory-website/secrets/alpha-license-public.pem
+
+# server: pull, configure, rebuild
+cd /opt/causal-memory-website
+git pull
+chmod 600 secrets/alpha-license-private.pem
+cat >> .env <<'EOF'
+ALPHA_DESK_ZIP_PATH=/app/data/alpha-desk-0.1.2-dev.zip
+ALPHA_LICENSE_PRIVATE_KEY_PATH=/app/secrets/alpha-license-private.pem
+ALPHA_LICENSE_PUBLIC_KEY_PATH=/app/secrets/alpha-license-public.pem
+ALPHA_LICENSE_DAYS=365
+EOF
+docker compose up -d --build
+```
+
+The existing live `/api/key-request` proxy already reaches quota-platform, so
+the apply and claim flow uses the same approval queue.
+
 ## Docker deployment (self-hosted server)
 
 ```bash
