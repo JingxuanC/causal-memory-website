@@ -151,6 +151,7 @@ export function AlphaDeskClient({ lang }: { lang: Lang }) {
           contact: form.contact.trim(),
           purpose: `[Alpha Desk Pro] ${form.purpose.trim() || "Alpha Desk"}`,
           volume: form.volume.trim(),
+          product: "alpha-desk",
           groups: ["alpha", "memory"],
         }),
       });
