@@ -42,6 +42,33 @@ For production, create a second OAuth App with the production domain and set the
 
 See [.env.example](.env.example). `DATABASE_URL` defaults to SQLite (`file:./dev.db`); for production use Postgres (Neon / Vercel Postgres) and update `prisma/schema.prisma`'s datasource provider accordingly.
 
+## Alpha Desk product page
+
+`/alpha-desk` is the public download + Pro application page. It reuses the
+existing key-request pipeline:
+
+1. Download: `GET /api/alpha-desk/download` streams `ALPHA_DESK_ZIP_PATH`
+   (or redirects to `ALPHA_DESK_DOWNLOAD_URL`).
+2. Apply: the page submits to the existing `/api/key-request` proxy with
+   groups `alpha,memory`.
+3. Claim: `POST /api/alpha-desk/claim` picks up the approved mcphub cloud key
+   once, embeds it in an offline-signed `ADK1.…` license, and returns it. The
+   cloud key is never stored by the website.
+
+Deployment variables (see `.env.example`):
+
+```bash
+ALPHA_DESK_ZIP_PATH=/app/data/alpha-desk-0.1.2-dev.zip
+ALPHA_LICENSE_PRIVATE_KEY_PATH=/app/secrets/alpha-license-private.pem
+ALPHA_LICENSE_PUBLIC_KEY_PATH=/app/secrets/alpha-license-public.pem
+ALPHA_LICENSE_DAYS=365
+```
+
+The private key is the same keypair as `alpha-desk/product/license/public.pem`.
+Mount it read-only; do not commit it. Offline licenses cannot be revoked, so a
+leaked signing key is equivalent to a leaked license mint. If that risk is not
+acceptable, replace the claim route with a manual signing step.
+
 ## Docker deployment (self-hosted server)
 
 ```bash

@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 prisma/dev.db
 prisma/dev.db-journal
+
+# Alpha Desk release artifacts and signing keys
+/secrets
+/data/*.zip
