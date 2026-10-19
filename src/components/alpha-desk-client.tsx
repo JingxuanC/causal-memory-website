@@ -9,11 +9,13 @@ const T = {
     freeBadge: "免费",
     freeTitle: "下载 Alpha Desk",
     freeBody:
-      "预构建的 DeepSeek Harness profile：4 个金融 Bot、35 个技能、行情中心/仪表盘、6 种研究报告。安装不需要 pnpm。",
-    download: "下载安装包",
+      "预构建的 DeepSeek Harness profile：4 个金融 Bot、35 个技能、行情中心/仪表盘、6 种研究报告。支持 macOS 与 Windows。",
+    download: "下载安装包（Bundle）",
     downloadSkill: "下载安装 Skill",
     downloadSkillHint: "把 zip 解压到 DSH 的 skills 目录，然后对 DSH 说“安装 Alpha Desk”。",
-    version: "0.1.4-dev · macOS（Apple Silicon）· 需要 DSH 0.2 + Python 3.11",
+    downloadBundle: "旧版 zip（macOS）",
+    downloadBundleHint: "单包约 0.7MB，macOS / Windows 通用，安装时自动从私有 registry 取依赖。旧版 zip 仅 macOS 应急使用。",
+    version: "0.1.9-dev · macOS / Windows · 需要 DSH 0.2 + Python 3.9+",
     proBadge: "PRO",
     proTitle: "申请 Pro license",
     proBody:
@@ -51,11 +53,13 @@ const T = {
     freeBadge: "Free",
     freeTitle: "Download Alpha Desk",
     freeBody:
-      "A prebuilt DeepSeek Harness profile: 4 finance Bots, 35 skills, market panel/dashboard, and 6 report types. No pnpm install required.",
+      "A prebuilt DeepSeek Harness profile: 4 finance Bots, 35 skills, market panel/dashboard, and 6 report types. Runs on macOS and Windows.",
     download: "Download package",
     downloadSkill: "Download install skill",
     downloadSkillHint: "Unzip into your DSH skills folder, then tell DSH: “install Alpha Desk”.",
-    version: "0.1.4-dev · macOS (Apple Silicon) · DSH 0.2 + Python 3.11",
+    downloadBundle: "Legacy zip (macOS)",
+    downloadBundleHint: "Single ~0.7MB tarball for macOS and Windows; dependencies resolve from our private registry. The legacy zip is macOS rescue only.",
+    version: "0.1.9-dev · macOS / Windows · DSH 0.2 + Python 3.9+",
     proBadge: "PRO",
     proTitle: "Apply for a Pro license",
     proBody:
@@ -231,14 +235,18 @@ export function AlphaDeskClient({ lang }: { lang: Lang }) {
           </div>
           <p className="mt-2 text-sm text-[#475569]">{t.freeBody}</p>
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <a href="/api/alpha-desk/download" className={cls.btn}>
+            <a href="/api/alpha-desk/bundle" className={cls.btn}>
               {t.download}
             </a>
             <a href="/api/alpha-desk/skill" className={cls.btnGhost}>
               {t.downloadSkill}
             </a>
+            <a href="/api/alpha-desk/download" className={cls.btnGhost}>
+              {t.downloadBundle}
+            </a>
           </div>
           <p className="mt-2 text-xs text-[#64748b]">{t.downloadSkillHint}</p>
+          <p className="mt-1 text-xs text-[#64748b]">{t.downloadBundleHint}</p>
           <p className="mt-1 text-xs text-[#94a3b8]">{t.version}</p>
         </section>
 

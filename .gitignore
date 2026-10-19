@@ -45,3 +45,7 @@ prisma/dev.db-journal
 # Alpha Desk release artifacts and signing keys
 /secrets
 /data/*.zip
+
+# Alpha Desk bundle artifacts
+/data/*.tgz
+/.next*
