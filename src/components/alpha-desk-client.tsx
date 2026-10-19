@@ -15,7 +15,8 @@ const T = {
     downloadSkillHint: "把 zip 解压到 DSH 的 skills 目录，然后对 DSH 说“安装 Alpha Desk”。",
     downloadBundle: "旧版 zip（macOS）",
     downloadBundleHint: "单包约 0.7MB（npm 包 deepseek-alpha-desk），macOS / Windows 通用，依赖自动从私有 registry 解析。旧版 zip 仅 macOS 应急使用。",
-    version: "0.1.10-dev · macOS / Windows · 需要 DSH 0.2 + Python 3.9+",
+    installSteps: "桌面 App 安装：设置 → 插件 → 添加插件 → 输入 deepseek-alpha-desk → 安装源填 https://causal-memory.com/npm/ → 安装后重启。",
+    version: "0.1.13-dev · macOS / Windows · 需要 DSH 0.2 + Python 3.9+",
     proBadge: "PRO",
     proTitle: "申请 Pro license",
     proBody:
@@ -59,7 +60,8 @@ const T = {
     downloadSkillHint: "Unzip into your DSH skills folder, then tell DSH: “install Alpha Desk”.",
     downloadBundle: "Legacy zip (macOS)",
     downloadBundleHint: "Single ~0.7MB tarball (npm package deepseek-alpha-desk) for macOS and Windows; dependencies resolve from our private registry. The legacy zip is macOS rescue only.",
-    version: "0.1.10-dev · macOS / Windows · DSH 0.2 + Python 3.9+",
+    installSteps: "Desktop app: Settings → Plugins → Add plugin → enter deepseek-alpha-desk → source https://causal-memory.com/npm/ → install, then restart.",
+    version: "0.1.13-dev · macOS / Windows · DSH 0.2 + Python 3.9+",
     proBadge: "PRO",
     proTitle: "Apply for a Pro license",
     proBody:
@@ -247,6 +249,7 @@ export function AlphaDeskClient({ lang }: { lang: Lang }) {
           </div>
           <p className="mt-2 text-xs text-[#64748b]">{t.downloadSkillHint}</p>
           <p className="mt-1 text-xs text-[#64748b]">{t.downloadBundleHint}</p>
+          <p className="mt-1 text-xs text-[#0284c7]">{t.installSteps}</p>
           <p className="mt-1 text-xs text-[#94a3b8]">{t.version}</p>
         </section>
 
