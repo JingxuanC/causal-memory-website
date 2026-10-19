@@ -13,7 +13,7 @@ const T = {
     download: "下载安装包",
     downloadSkill: "下载安装 Skill",
     downloadSkillHint: "把 zip 解压到 DSH 的 skills 目录，然后对 DSH 说“安装 Alpha Desk”。",
-    version: "0.1.3-dev · macOS（Apple Silicon）· 需要 DSH 0.2 + Python 3.11",
+    version: "0.1.4-dev · macOS（Apple Silicon）· 需要 DSH 0.2 + Python 3.11",
     proBadge: "PRO",
     proTitle: "申请 Pro license",
     proBody:
@@ -55,7 +55,7 @@ const T = {
     download: "Download package",
     downloadSkill: "Download install skill",
     downloadSkillHint: "Unzip into your DSH skills folder, then tell DSH: “install Alpha Desk”.",
-    version: "0.1.3-dev · macOS (Apple Silicon) · DSH 0.2 + Python 3.11",
+    version: "0.1.4-dev · macOS (Apple Silicon) · DSH 0.2 + Python 3.11",
     proBadge: "PRO",
     proTitle: "Apply for a Pro license",
     proBody:
