@@ -40,7 +40,7 @@ export default async function AlphaDeskPage() {
           <span className="rounded-full border border-[#0284c7] px-3 py-0.5 text-xs font-semibold text-[#0284c7]">
             Alpha Desk
           </span>
-          <span className="text-xs text-[#94a3b8]">0.1.9-dev · developer preview</span>
+          <span className="text-xs text-[#94a3b8]">0.1.10-dev · developer preview</span>
         </div>
         <h1 className="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-[#0f172a]">
           {zh ? "把 A 股研究，交给一个金融 Bot 团队" : "A-share research, run by a team of finance Bots"}

@@ -14,8 +14,8 @@ const T = {
     downloadSkill: "下载安装 Skill",
     downloadSkillHint: "把 zip 解压到 DSH 的 skills 目录，然后对 DSH 说“安装 Alpha Desk”。",
     downloadBundle: "旧版 zip（macOS）",
-    downloadBundleHint: "单包约 0.7MB，macOS / Windows 通用，安装时自动从私有 registry 取依赖。旧版 zip 仅 macOS 应急使用。",
-    version: "0.1.9-dev · macOS / Windows · 需要 DSH 0.2 + Python 3.9+",
+    downloadBundleHint: "单包约 0.7MB（npm 包 deepseek-alpha-desk），macOS / Windows 通用，依赖自动从私有 registry 解析。旧版 zip 仅 macOS 应急使用。",
+    version: "0.1.10-dev · macOS / Windows · 需要 DSH 0.2 + Python 3.9+",
     proBadge: "PRO",
     proTitle: "申请 Pro license",
     proBody:
@@ -58,8 +58,8 @@ const T = {
     downloadSkill: "Download install skill",
     downloadSkillHint: "Unzip into your DSH skills folder, then tell DSH: “install Alpha Desk”.",
     downloadBundle: "Legacy zip (macOS)",
-    downloadBundleHint: "Single ~0.7MB tarball for macOS and Windows; dependencies resolve from our private registry. The legacy zip is macOS rescue only.",
-    version: "0.1.9-dev · macOS / Windows · DSH 0.2 + Python 3.9+",
+    downloadBundleHint: "Single ~0.7MB tarball (npm package deepseek-alpha-desk) for macOS and Windows; dependencies resolve from our private registry. The legacy zip is macOS rescue only.",
+    version: "0.1.10-dev · macOS / Windows · DSH 0.2 + Python 3.9+",
     proBadge: "PRO",
     proTitle: "Apply for a Pro license",
     proBody:
