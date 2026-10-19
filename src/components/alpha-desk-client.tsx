@@ -9,14 +9,14 @@ const T = {
     freeBadge: "免费",
     freeTitle: "下载 Alpha Desk",
     freeBody:
-      "预构建的 DeepSeek Harness profile：4 个金融 Bot、35 个技能、行情中心/仪表盘、6 种研究报告。支持 macOS 与 Windows。",
+      "预构建的 DeepSeek Harness profile：9 个金融 Bot、35 个技能、行情中心/仪表盘、6 种研究报告。支持 macOS 与 Windows。",
     download: "下载安装包（Bundle）",
     downloadSkill: "下载安装 Skill",
     downloadSkillHint: "把 zip 解压到 DSH 的 skills 目录，然后对 DSH 说“安装 Alpha Desk”。",
     downloadBundle: "旧版 zip（macOS）",
     downloadBundleHint: "单包约 0.7MB（npm 包 deepseek-alpha-desk），macOS / Windows 通用，依赖自动从私有 registry 解析。旧版 zip 仅 macOS 应急使用。",
     installSteps: "桌面 App 安装：设置 → 插件 → 添加插件 → 输入 deepseek-alpha-desk → 安装源填 https://causal-memory.com/npm/ → 安装后重启。",
-    version: "0.1.13-dev · macOS / Windows · 需要 DSH 0.2 + Python 3.9+",
+    version: "0.1.14-dev · macOS / Windows · 需要 DSH 0.2 + Python 3.9+",
     proBadge: "PRO",
     proTitle: "申请 Pro license",
     proBody:
@@ -54,14 +54,14 @@ const T = {
     freeBadge: "Free",
     freeTitle: "Download Alpha Desk",
     freeBody:
-      "A prebuilt DeepSeek Harness profile: 4 finance Bots, 35 skills, market panel/dashboard, and 6 report types. Runs on macOS and Windows.",
+      "A prebuilt DeepSeek Harness profile: 9 finance Bots, 35 skills, market panel/dashboard, and 6 report types. Runs on macOS and Windows.",
     download: "Download package",
     downloadSkill: "Download install skill",
     downloadSkillHint: "Unzip into your DSH skills folder, then tell DSH: “install Alpha Desk”.",
     downloadBundle: "Legacy zip (macOS)",
     downloadBundleHint: "Single ~0.7MB tarball (npm package deepseek-alpha-desk) for macOS and Windows; dependencies resolve from our private registry. The legacy zip is macOS rescue only.",
     installSteps: "Desktop app: Settings → Plugins → Add plugin → enter deepseek-alpha-desk → source https://causal-memory.com/npm/ → install, then restart.",
-    version: "0.1.13-dev · macOS / Windows · DSH 0.2 + Python 3.9+",
+    version: "0.1.14-dev · macOS / Windows · DSH 0.2 + Python 3.9+",
     proBadge: "PRO",
     proTitle: "Apply for a Pro license",
     proBody:

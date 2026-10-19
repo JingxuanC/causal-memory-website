@@ -6,12 +6,12 @@ import { AlphaDeskClient } from "@/components/alpha-desk-client";
 export const metadata: Metadata = {
   title: "Alpha Desk — 金融 Bots 研究团队",
   description:
-    "Alpha Desk is a prebuilt DeepSeek Harness profile for A-share research: 4 finance Bots, 35 skills, market panel, and 6 report types. Download Free, apply for Pro.",
+    "Alpha Desk is a prebuilt DeepSeek Harness profile for A-share research: 9 finance Bots, 35 skills, market panel, and 6 report types. Download Free, apply for Pro.",
 };
 
 const FEATURES = {
   zh: [
-    ["4 个金融 Bot", "数据官 / 事件官 / 复盘官 / 研究官，各司其职，可以互相派活。"],
+    ["9 个金融 Bot", "数据官 / 事件官 / 复盘官 / 研究官 + 因子猎手 / 选股师 / 回测风控官 / 策略师 / 盯盘手，可以互相派活。"],
     ["35 个技能", "从个股速览、财报点评到行业对比、深度研究，都是可复用的工作流。"],
     ["行情中心 + 仪表盘", "K 线、指标、龙虎榜、资金流、自选组合，和对话放在同一个工作台。"],
     ["6 种报告", "技术对比、事件点评、个股速览、财报点评、行业对比、深度个股；每份都带独立复核。"],
@@ -19,7 +19,7 @@ const FEATURES = {
     ["本地优先", "license 离线验签，研究数据默认不离开本机；云端服务按需开通。"],
   ],
   en: [
-    ["4 finance Bots", "Data, events, review and research — each with a job, able to delegate to each other."],
+    ["9 finance Bots", "Data, events, review and research plus factor, screening, backtest, strategy and watch Bots — able to delegate to each other."],
     ["35 skills", "Reusable workflows from a quick stock snapshot to earnings, industry and deep research."],
     ["Market panel + dashboard", "Candles, indicators, dragon-tiger, fund flow and watchlists beside the conversation."],
     ["6 report types", "Technical compare, event study, snapshot, earnings, industry and deep stock — each independently verified."],
@@ -40,14 +40,14 @@ export default async function AlphaDeskPage() {
           <span className="rounded-full border border-[#0284c7] px-3 py-0.5 text-xs font-semibold text-[#0284c7]">
             Alpha Desk
           </span>
-          <span className="text-xs text-[#94a3b8]">0.1.13-dev · developer preview</span>
+          <span className="text-xs text-[#94a3b8]">0.1.14-dev · developer preview</span>
         </div>
         <h1 className="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-[#0f172a]">
           {zh ? "把 A 股研究，交给一个金融 Bot 团队" : "A-share research, run by a team of finance Bots"}
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-[#475569]">
           {zh
-            ? "Alpha Desk 是预配置好的 DeepSeek Harness：装上就有 4 个金融 Bot、35 个技能、行情中心和 6 种研究报告。免费版可以直接用，Pro 再加云端因子、Kronos 和记忆。"
+            ? "Alpha Desk 是预配置好的 DeepSeek Harness：装上就有 9 个金融 Bot、35 个技能、行情中心和 6 种研究报告。免费版可以直接用，Pro 再加云端因子、Kronos 和记忆。"
             : "Alpha Desk is a preconfigured DeepSeek Harness: four finance Bots, 35 skills, a market panel and six research reports. Start free; Pro adds cloud factors, Kronos and memory."}
         </p>
         <div className="mt-6 flex flex-wrap gap-3 text-sm">
