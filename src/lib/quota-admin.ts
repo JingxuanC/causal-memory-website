@@ -12,7 +12,7 @@ import type {
  * server components read the list, and the /api/admin route handler proxies
  * mutations. Both paths keep `cache: "no-store"` and a hard timeout.
  */
-const DEFAULT_BASE = "http://127.0.0.1:3200";
+const DEFAULT_BASE = "http://127.0.0.1:3300";
 const LIST_TIMEOUT_MS = 15_000;
 const ACTION_TIMEOUT_MS = 25_000;
 
