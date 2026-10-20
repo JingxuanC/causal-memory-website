@@ -306,7 +306,7 @@ export async function POST(request: Request) {
     await prisma.licenseClaim.update({ where: { id: claimId }, data: { memoryTokenId: memory.id } });
   } catch (error) {
     await prisma.licenseClaim
-      .update({ where: { id: claimId }, data: { status: "failed", errorCode: "memory_token_failed" } })
+      .delete({ where: { id: claimId } })
       .catch(() => undefined);
     return noStore(
       {
@@ -338,13 +338,15 @@ export async function POST(request: Request) {
     };
     if (!response.ok || data.ok === false) {
       await revokeMemoryToken(memory.id, memory.tokenHash);
-      await prisma.licenseClaim
-        .update({
-          where: { id: claimId },
-          data: { status: "failed", errorCode: data.error || `pickup_${response.status}` },
-        })
-        .catch(() => undefined);
       if (response.status === 410) {
+        // The request really was consumed. Keep a failed row for audit, but
+        // the token is revoked and was never returned to the client.
+        await prisma.licenseClaim
+          .update({
+            where: { id: claimId },
+            data: { status: "failed", errorCode: data.error || "pickup_410" },
+          })
+          .catch(() => undefined);
         return noStore(
           {
             error: "already_claimed",
@@ -353,6 +355,10 @@ export async function POST(request: Request) {
           409,
         );
       }
+      // 403/409/5xx: ownership did not match or the upstream did not consume
+      // the request. Delete the reservation so one user cannot permanently
+      // block the real owner by racing a claim with a foreign account.
+      await prisma.licenseClaim.delete({ where: { id: claimId } }).catch(() => undefined);
       return noStore(
         { error: "pickup_failed", hint: data.hint ?? "领取登记失败，请稍后再试或联系管理员。" },
         response.status === 403 || response.status === 409 ? 409 : 502,
@@ -360,9 +366,7 @@ export async function POST(request: Request) {
     }
   } catch {
     await revokeMemoryToken(memory.id, memory.tokenHash);
-    await prisma.licenseClaim
-      .update({ where: { id: claimId }, data: { status: "failed", errorCode: "upstream_unreachable" } })
-      .catch(() => undefined);
+    await prisma.licenseClaim.delete({ where: { id: claimId } }).catch(() => undefined);
     return noStore({ error: "upstream_unreachable", hint: "领取服务暂时不可用，请稍后再试。" }, 502);
   }
 
