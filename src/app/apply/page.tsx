@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { getLang } from "@/lib/i18n";
 import { parseApplyProduct } from "@/lib/apply-products";
 import { ApplyTabs } from "@/components/apply-tabs";
+import { PaypalMemoryButton } from "@/components/paypal-memory-button";
 
 export const metadata: Metadata = {
   title: "Apply — MCP API key, Alpha Desk Pro & cloud memory",
@@ -44,6 +45,18 @@ export default async function ApplyPage({
         signedIn={Boolean(session?.user)}
         userLabel={userLabel}
       />
+
+      {initialProduct === "memory" && (
+        <section className="mt-8 rounded-xl border border-[#ddd6fe] bg-[#faf5ff] p-6">
+          <h2 className="text-lg font-semibold text-[#0f172a]">{zh ? "不想等审批？直接订阅" : "Skip the queue — subscribe directly"}</h2>
+          <p className="mt-1 text-sm text-[#64748b]">
+            {zh
+              ? "PayPal 订阅 $14/月（≈¥99），付款后 10 分钟内开通；也可以用上面的申请单走人工审批。"
+              : "Subscribe via PayPal at $14/mo (≈¥99) and get activated within 10 minutes, or use the request form above."}
+          </p>
+          <PaypalMemoryButton lang={lang} />
+        </section>
+      )}
 
       <section className="mt-12 border-t border-[#e2e8f0] pt-6 text-sm text-[#64748b]">
         <h2 className="mb-2 font-semibold text-[#0f172a]">{zh ? "说明" : "Notes"}</h2>
