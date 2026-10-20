@@ -21,7 +21,7 @@ const T = {
     proTitle: "申请 Pro license",
     proBody:
       "Pro 解锁 4 种进阶报告，以及云端因子挖掘、Kronos 与 causal-memory。提交后人工审批，通过后凭申请单号自助领取 license。",
-    proPrice: "¥399 / 月（早鸟）",
+    proPrice: "¥499 / 月",
     step1: "下载并安装 Alpha Desk",
     step2: "提交 Pro 申请，记下申请单号",
     step3: "审批通过后，在下方领取 license",
@@ -74,7 +74,7 @@ const T = {
     proTitle: "Apply for a Pro license",
     proBody:
       "Pro unlocks four advanced reports plus cloud factor mining, Kronos and causal-memory. Human-reviewed; redeem your license with the request ID once approved.",
-    proPrice: "¥399 / month (early bird)",
+    proPrice: "¥499 / month",
     step1: "Download and install Alpha Desk",
     step2: "Submit a Pro request and save the request ID",
     step3: "Once approved, claim the license below",

@@ -59,6 +59,16 @@ const T = {
     needName: "Please fill in a name / team",
     needContact: "Please leave a contact — otherwise we cannot reach you",
     requestId: "Request ID",
+    product: "Product",
+    productApi: "MCP API key",
+    productAlpha: "Alpha Desk Pro",
+    productMemory: "Cloud memory",
+    otherAlpha:
+      "This request is for Alpha Desk Pro. The license and memory token are claimed on the Alpha Desk page, not here.",
+    otherMemory:
+      "This request is for cloud memory. Switch to the cloud-memory tab to claim the cm_ memory key with the same GitHub account.",
+    goAlpha: "Open Alpha Desk",
+    goMemory: "Open cloud memory tab",
   },
   zh: {
     formTitle: "申请 API Key",
@@ -106,6 +116,16 @@ const T = {
     needName: "请填写称呼或团队名",
     needContact: "请留联系方式，否则无法通知你审批结果",
     requestId: "申请单号",
+    product: "产品",
+    productApi: "MCP API Key",
+    productAlpha: "Alpha Desk Pro",
+    productMemory: "云端记忆",
+    otherAlpha:
+      "这张申请单属于 Alpha Desk Pro，license 和记忆 token 需要在 Alpha Desk 页面领取，不能在这里领 MCP key。",
+    otherMemory:
+      "这张申请单属于云端记忆。请切换到「云端记忆」tab，用同一个 GitHub 账号领取 cm_ 记忆密钥。",
+    goAlpha: "前往 Alpha Desk",
+    goMemory: "前往云端记忆 tab",
   },
 } as const;
 
@@ -250,7 +270,23 @@ export function ApplyForm({ lang, initialReq = "" }: { lang: Lang; initialReq?: 
     }
   }
 
-  const canRedeem = Boolean(status && status.status === "approved" && status.claimable);
+  const statusProduct = typeof status?.product === "string" ? status.product : "api";
+  const isApiProduct = statusProduct === "api";
+  const canRedeem = Boolean(
+    status && status.status === "approved" && status.claimable && isApiProduct,
+  );
+  const productName =
+    statusProduct === "alpha-desk"
+      ? t.productAlpha
+      : statusProduct === "memory"
+        ? t.productMemory
+        : t.productApi;
+  const otherProductHref =
+    statusProduct === "alpha-desk"
+      ? "/alpha-desk#apply"
+      : statusProduct === "memory"
+        ? `/apply?product=memory&req=${encodeURIComponent(String(status?.req_no ?? queryNo))}`
+        : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -400,6 +436,8 @@ export function ApplyForm({ lang, initialReq = "" }: { lang: Lang; initialReq?: 
             <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5">
               <dt className="text-[#64748b]">{t.requestId}</dt>
               <dd className="font-mono text-[#0f172a]">{String(status.req_no)}</dd>
+              <dt className="text-[#64748b]">{t.product}</dt>
+              <dd className="text-[#0f172a]">{productName}</dd>
               <dt className="text-[#64748b]">{t.name}</dt>
               <dd className="text-[#0f172a]">{String(status.name)}</dd>
               <dt className="text-[#64748b]">{t.submittedAt}</dt>
@@ -426,6 +464,19 @@ export function ApplyForm({ lang, initialReq = "" }: { lang: Lang; initialReq?: 
             )}
             {typeof status.hint === "string" && status.hint && (
               <p className="mt-3 border-l-2 border-[#f59e0b] pl-3 text-[#92400e]">{status.hint}</p>
+            )}
+            {!isApiProduct && otherProductHref && (
+              <div className="mt-3 rounded-lg border border-[#f59e0b]/40 bg-[#fffbeb] px-3 py-2.5 text-[#92400e]">
+                <p>
+                  {statusProduct === "alpha-desk" ? t.otherAlpha : t.otherMemory}
+                </p>
+                <a
+                  href={otherProductHref}
+                  className="mt-1.5 inline-block text-sm font-semibold text-[#0284c7] underline"
+                >
+                  {statusProduct === "alpha-desk" ? t.goAlpha : t.goMemory}
+                </a>
+              </div>
             )}
           </div>
         )}

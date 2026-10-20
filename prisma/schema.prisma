@@ -75,7 +75,7 @@ model ApiToken {
   // When the token is entitlement-bound (Alpha Desk claim) this mirrors the
   // license expiry; the cloud.json projection filters out expired rows.
   expiresAt    DateTime?
-  // dashboard | alpha-desk
+  // dashboard | alpha-desk | memory
   source       String    @default("dashboard")
   createdAt    DateTime  @default(now())
   lastUsedAt   DateTime?
@@ -86,9 +86,10 @@ model ApiToken {
   @@index([expiresAt])
 }
 
-// One row per redeemed Alpha Desk request. `reqNo` is unique, so a request
-// can be bound to exactly one website user. The memory token plaintext is
-// never stored; only the ApiToken id (hash at rest) is referenced.
+// One row per redeemed request (Alpha Desk license or cloud-memory key).
+// `reqNo` is unique, so a request can be bound to exactly one website user.
+// The memory token plaintext is never stored; only the ApiToken id (hash at
+// rest) is referenced. Memory claims keep licenseSha256 empty.
 model LicenseClaim {
   id             String    @id @default(cuid())
   reqNo          String    @unique

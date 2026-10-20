@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { isAdmin } from "@/lib/admin";
 import { AdminRequests } from "@/components/admin-requests";
+import { AdminTabs } from "@/components/admin-tabs";
 import { fetchQuotaRequests, parseAdminStatus, toAdminRows } from "@/lib/quota-admin";
 
 export const metadata: Metadata = {
@@ -71,7 +72,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             申请审批管理后台
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-[#475569]">
-            审批 API Key / Alpha Desk 申请，查看绑定账号与密钥领取状态，并处理改发与账号绑定。
+            审批 API Key / Alpha Desk / 云端记忆申请，按产品筛选，查看绑定账号与密钥领取状态，并处理改发与账号绑定。
           </p>
         </div>
         <div className="text-sm sm:text-right">
@@ -85,6 +86,8 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           </Link>
         </div>
       </header>
+
+      <AdminTabs active="requests" />
 
       {result.ok ? (
         <AdminRequests

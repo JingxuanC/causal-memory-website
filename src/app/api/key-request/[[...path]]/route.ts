@@ -15,9 +15,10 @@ import { claimIdentityConfigured, signClaimIdentity } from "@/lib/quota-identity
  *   /api/key-request/REQ-XXXX   → /api/apply/REQ-XXXX
  *   /api/key-request/REQ-XXXX/pickup → /api/apply/REQ-XXXX/pickup
  *
- * Alpha Desk 的申请在代理层要求登录，并附带 ALPHA_CLAIM_SECRET 签名的身份
- * 头；quota-platform 收到后把申请单绑定到该 user id。这样即使有人直接访问
- * 公网的 /quota/api/apply/<reqNo>/pickup，也无法领走别人的申请。
+ * Alpha Desk / 云端记忆的申请在代理层要求登录，并附带 ALPHA_CLAIM_SECRET
+ * 签名的身份头；quota-platform 收到后把申请单绑定到该 user id。这样即使
+ * 有人直接访问公网的 /quota/api/apply/<reqNo>/pickup，也无法领走别人的申请。
+ * 通用 API Key（product=api）保持匿名申请/领取，不受影响。
  */
 const UPSTREAM =
   process.env.KEY_REQUEST_UPSTREAM?.replace(/\/$/, "") ?? "http://127.0.0.1:3300/api/apply";
@@ -29,13 +30,14 @@ function noStore(body: unknown, status: number): NextResponse {
   return NextResponse.json(body, { status, headers: { "Cache-Control": "no-store" } });
 }
 
-function isAlphaDeskApply(segs: string[], body: string): boolean {
-  if (segs.length !== 0) return false;
+/** product=memory / alpha-desk 的申请需要网站登录并绑定账号。 */
+function applyProduct(segs: string[], body: string): string {
+  if (segs.length !== 0) return "";
   try {
     const parsed = JSON.parse(body) as { product?: unknown };
-    return String(parsed?.product ?? "").toLowerCase() === "alpha-desk";
+    return String(parsed?.product ?? "").toLowerCase();
   } catch {
-    return false;
+    return "";
   }
 }
 
@@ -57,15 +59,21 @@ async function forward(request: Request, segs: string[]): Promise<NextResponse> 
     Accept: "application/json",
   };
 
-  // Alpha Desk Pro 申请：必须登录，并把身份绑定到申请单。
-  if (request.method === "POST" && body && isAlphaDeskApply(segs, body)) {
+  // Alpha Desk Pro / 云端记忆申请：必须登录，并把身份绑定到申请单。
+  const product = request.method === "POST" && body ? applyProduct(segs, body) : "";
+  if (product === "alpha-desk" || product === "memory") {
     const session = await auth();
     if (!session?.user?.id) {
+      const memory = product === "memory";
       return noStore(
         {
           error: "login_required",
-          hint: "申请 Alpha Desk Pro 需要先用 GitHub 登录，申请单才能绑定到你的账号。",
-          signInUrl: "/api/auth/signin?callbackUrl=/alpha-desk",
+          hint: memory
+            ? "申请云端记忆需要先用 GitHub 登录，申请单和记忆密钥都会绑定到你的账号。"
+            : "申请 Alpha Desk Pro 需要先用 GitHub 登录，申请单才能绑定到你的账号。",
+          signInUrl: memory
+            ? "/api/auth/signin?callbackUrl=%2Fapply%3Fproduct%3Dmemory"
+            : "/api/auth/signin?callbackUrl=/alpha-desk",
         },
         401,
       );
@@ -74,7 +82,10 @@ async function forward(request: Request, segs: string[]): Promise<NextResponse> 
       return noStore(
         {
           error: "identity_unavailable",
-          hint: "网站未配置 ALPHA_CLAIM_SECRET，暂时不能提交 Pro 申请。请联系管理员。",
+          hint:
+            product === "memory"
+              ? "网站未配置 ALPHA_CLAIM_SECRET，暂时不能提交云端记忆申请。请联系管理员。"
+              : "网站未配置 ALPHA_CLAIM_SECRET，暂时不能提交 Pro 申请。请联系管理员。",
         },
         503,
       );

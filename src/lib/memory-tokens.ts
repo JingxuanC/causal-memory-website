@@ -17,7 +17,7 @@ export async function createMemoryToken(input: {
   tenant: string;
   name: string;
   expiresAt: Date | null;
-  source: "dashboard" | "alpha-desk";
+  source: "dashboard" | "alpha-desk" | "memory";
 }): Promise<{ id: string; token: string; tokenHash: string }> {
   const { token, tokenHash } = tokenMaterial();
   const record = await prisma.$transaction(async (tx) => {

@@ -34,6 +34,15 @@ const TABS: { key: AdminStatusFilter; label: string }[] = [
   { key: "all", label: "全部" },
 ];
 
+type ProductFilter = "all" | "api" | "alpha-desk" | "memory";
+
+const PRODUCT_FILTERS: { key: ProductFilter; label: string }[] = [
+  { key: "all", label: "全部产品" },
+  { key: "api", label: "API Key" },
+  { key: "alpha-desk", label: "Alpha Desk" },
+  { key: "memory", label: "云端记忆" },
+];
+
 const STATUS_META: Record<string, { label: string; className: string }> = {
   pending: { label: "待审批", className: "bg-[#fef3c7] text-[#92400e]" },
   approved: { label: "已通过", className: "bg-[#dcfce7] text-[#166534]" },
@@ -80,19 +89,26 @@ function statusMeta(status: string): { label: string; className: string } {
 }
 
 function productLabel(product: string): string {
-  return product === "alpha-desk" ? "Alpha Desk" : "API Key";
+  if (product === "alpha-desk") return "Alpha Desk";
+  if (product === "memory") return "云端记忆";
+  return "API Key";
 }
 
 function productClass(product: string): string {
-  return product === "alpha-desk"
-    ? "border-[#ddd6fe] bg-[#f5f3ff] text-[#6d28d9]"
-    : "border-[#e2e8f0] bg-[#f8fafc] text-[#475569]";
+  if (product === "alpha-desk") {
+    return "border-[#ddd6fe] bg-[#f5f3ff] text-[#6d28d9]";
+  }
+  if (product === "memory") {
+    return "border-[#bae6fd] bg-[#f0f9ff] text-[#0369a1]";
+  }
+  return "border-[#e2e8f0] bg-[#f8fafc] text-[#475569]";
 }
 
 export function AdminRequests({ requests, initialStatus, pendingCount, claimableCount }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [activeTab, setActiveTab] = useState<AdminStatusFilter>(initialStatus);
+  const [productFilter, setProductFilter] = useState<ProductFilter>("all");
   const [panel, setPanel] = useState<Panel>(null);
   const [busy, setBusy] = useState<Busy>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
@@ -114,10 +130,28 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
     return next;
   }, [requests]);
 
-  const visible = useMemo(
-    () => (activeTab === "all" ? requests : requests.filter((row) => row.status === activeTab)),
-    [activeTab, requests],
-  );
+  const productCounts = useMemo<Record<ProductFilter, number>>(() => {
+    const next: Record<ProductFilter, number> = {
+      all: requests.length,
+      api: 0,
+      "alpha-desk": 0,
+      memory: 0,
+    };
+    for (const row of requests) {
+      if (row.product === "alpha-desk" || row.product === "memory") next[row.product] += 1;
+      else next.api += 1;
+    }
+    return next;
+  }, [requests]);
+
+  const visible = useMemo(() => {
+    const byStatus =
+      activeTab === "all" ? requests : requests.filter((row) => row.status === activeTab);
+    if (productFilter === "all") return byStatus;
+    return byStatus.filter((row) =>
+      productFilter === "api" ? row.product !== "alpha-desk" && row.product !== "memory" : row.product === productFilter,
+    );
+  }, [activeTab, productFilter, requests]);
 
   const actionsDisabled = Boolean(busy) || isPending;
   const activeRow = panel ? requests.find((row) => row.id === panel.rowId) : undefined;
@@ -234,8 +268,18 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
       return (
         <div className="rounded-lg border border-[#bae6fd] bg-[#f0f9ff] p-4">
           <p className="text-sm text-[#0c4a6e]">
-            批准后会为申请人创建密钥，申请人可凭申请单号领取。确认批准{" "}
-            <span className="font-mono font-semibold">{row.reqNo}</span>？
+            {row.product === "memory" ? (
+              <>
+                批准后不会创建 MCP key，只把申请标记为已通过；申请人需用绑定账号登录
+                /apply?product=memory 领取记忆密钥。确认批准{" "}
+                <span className="font-mono font-semibold">{row.reqNo}</span>？
+              </>
+            ) : (
+              <>
+                批准后会为申请人创建密钥，申请人可凭申请单号领取。确认批准{" "}
+                <span className="font-mono font-semibold">{row.reqNo}</span>？
+              </>
+            )}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <button
@@ -343,7 +387,7 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
           className="mt-2 w-full max-w-md rounded-lg border border-[#bae6fd] bg-white px-3 py-2 font-mono text-sm text-[#0f172a] placeholder:text-[#94a3b8] focus:border-[#0284c7] focus:outline-none"
         />
         <p className="mt-1.5 text-xs text-[#0369a1]">
-          绑定后 tenant 记为 <span className="font-mono">u_&lt;id&gt;</span>。Alpha Desk 申请只有绑定后才能领取。
+          绑定后 tenant 记为 <span className="font-mono">u_&lt;id&gt;</span>。Alpha Desk 与云端记忆申请只有绑定后才能领取。
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <button
@@ -386,7 +430,7 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
         <div>
           <h2 className="text-lg font-semibold text-[#0f172a]">申请列表</h2>
           <p className="mt-1 text-sm text-[#64748b]">
-            批准会创建密钥；拒绝理由会展示给申请人。所有操作都经服务端代理。
+            批准会创建密钥（云端记忆除外）；拒绝理由会展示给申请人。所有操作都经服务端代理。
           </p>
         </div>
         <button
@@ -432,6 +476,35 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
         })}
       </div>
 
+      <div className="mt-3 flex flex-wrap items-center gap-1.5" role="group" aria-label="申请产品筛选">
+        <span className="mr-1 text-xs font-medium text-[#94a3b8]">产品</span>
+        {PRODUCT_FILTERS.map((item) => {
+          const active = productFilter === item.key;
+          return (
+            <button
+              key={item.key}
+              type="button"
+              aria-pressed={active}
+              onClick={() => {
+                setProductFilter(item.key);
+                setPanel(null);
+                setNotice(null);
+              }}
+              className={`rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
+                active
+                  ? "border-[#0284c7] bg-[#0284c7] text-white"
+                  : "border-[#e2e8f0] bg-white text-[#64748b] hover:border-[#0284c7] hover:text-[#0284c7]"
+              }`}
+            >
+              {item.label}
+              <span className={`ml-1 ${active ? "text-[#bae6fd]" : "text-[#94a3b8]"}`}>
+                {productCounts[item.key]}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {notice && (
         <div
           role={notice.kind === "error" ? "alert" : "status"}
@@ -458,21 +531,24 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
           <p className="text-sm font-medium text-[#0f172a]">
             {requests.length === 0
               ? "还没有申请"
-              : `暂无${TABS.find((tab) => tab.key === activeTab)?.label ?? ""}申请`}
+              : `暂无${productFilter === "all" ? "" : PRODUCT_FILTERS.find((item) => item.key === productFilter)?.label ?? ""}${
+                  TABS.find((tab) => tab.key === activeTab)?.label ?? ""
+                }申请`}
           </p>
           <p className="mt-1 text-sm text-[#64748b]">
             {requests.length === 0
               ? "申请人提交后，这里会出现新的记录。"
-              : "切换上方标签查看其他状态的申请。"}
+              : "切换上方状态或产品标签查看其他申请。"}
           </p>
         </div>
       ) : (
         <div className="mt-5 overflow-hidden rounded-xl border border-[#e2e8f0] bg-white">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1080px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[1160px] border-collapse text-left text-sm">
               <thead>
                 <tr className="border-b border-[#e2e8f0] bg-[#f8fafc] text-xs font-semibold text-[#64748b]">
                   <th className="px-4 py-3 font-semibold">申请单号</th>
+                  <th className="px-4 py-3 font-semibold">产品</th>
                   <th className="px-4 py-3 font-semibold">申请内容</th>
                   <th className="px-4 py-3 font-semibold">状态</th>
                   <th className="px-4 py-3 font-semibold">绑定账号 / 租户</th>
@@ -492,8 +568,11 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
                           <div className="font-mono text-xs font-semibold text-[#0f172a]">
                             {row.reqNo || `#${row.id}`}
                           </div>
+                        </td>
+
+                        <td className="px-4 py-4">
                           <span
-                            className={`mt-1.5 inline-flex rounded-full border px-2 py-0.5 text-[11px] font-medium ${productClass(row.product)}`}
+                            className={`inline-flex rounded-full border px-2 py-0.5 text-[11px] font-medium ${productClass(row.product)}`}
                           >
                             {productLabel(row.product)}
                           </span>
@@ -544,11 +623,15 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
                           ) : null}
                           {row.status === "approved" ? (
                             <p className="mt-2 text-xs text-[#64748b]">
-                              {row.tokenPending
-                                ? "待领取"
-                                : row.pickedAt
+                              {row.product === "memory"
+                                ? row.pickedAt
                                   ? `已领取 ${formatTs(row.pickedAt)}`
-                                  : "密钥不可领取"}
+                                  : "待登录领取记忆密钥"
+                                : row.tokenPending
+                                  ? "待领取"
+                                  : row.pickedAt
+                                    ? `已领取 ${formatTs(row.pickedAt)}`
+                                    : "密钥不可领取"}
                             </p>
                           ) : null}
                           {row.mcKeyName ? (
@@ -604,7 +687,7 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
                                 </button>
                               </>
                             ) : null}
-                            {row.status === "approved" ? (
+                            {row.status === "approved" && row.product !== "memory" ? (
                               <button
                                 type="button"
                                 className={BTN.ghost}
@@ -614,6 +697,11 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
                               >
                                 改发
                               </button>
+                            ) : null}
+                            {row.status === "approved" && row.product === "memory" ? (
+                              <span className="text-xs text-[#94a3b8]">
+                                记忆密钥由网站登录态签发
+                              </span>
                             ) : null}
                             {!bound ? (
                               <button
@@ -634,7 +722,7 @@ export function AdminRequests({ requests, initialStatus, pendingCount, claimable
                       </tr>
                       {panel?.rowId === row.id && activeRow ? (
                         <tr className="border-b border-[#e2e8f0] bg-[#f8fafc] last:border-0">
-                          <td colSpan={6} className="px-4 py-4">
+                          <td colSpan={7} className="px-4 py-4">
                             {panelBody(activeRow, panel.kind)}
                           </td>
                         </tr>
