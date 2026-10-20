@@ -43,7 +43,7 @@ function hostOf(referrer: string): string {
 async function loadStats() {
   const todayStart = shanghaiDayStart(0);
   const weekStart = shanghaiDayStart(6);
-  const [pvToday, uvTodayRows, weekRows, topPaths, devices, countries, recent] = await Promise.all([
+  const [pvToday, uvTodayRows, weekRows, topPaths, devices, countries, recent, applyVisits, eventRows] = await Promise.all([
     prisma.pageview.count({ where: { createdAt: { gte: todayStart } } }),
     prisma.pageview.findMany({ where: { createdAt: { gte: todayStart } }, select: { ipHash: true } }),
     prisma.pageview.findMany({ where: { createdAt: { gte: weekStart } }, select: { createdAt: true, ipHash: true, referrer: true } }),
@@ -51,6 +51,8 @@ async function loadStats() {
     prisma.pageview.groupBy({ by: ["device"], where: { createdAt: { gte: weekStart } }, _count: { _all: true } }),
     prisma.pageview.groupBy({ by: ["country"], where: { createdAt: { gte: weekStart } }, _count: { _all: true }, orderBy: { _count: { country: "desc" } }, take: 8 }),
     prisma.pageview.findMany({ where: { createdAt: { gte: weekStart } }, select: { path: true, referrer: true }, take: 2000 }),
+    prisma.pageview.findMany({ where: { createdAt: { gte: weekStart }, path: { in: ["/apply", "/alpha-desk"] } }, select: { ipHash: true } }),
+    prisma.pageview.groupBy({ by: ["event"], where: { createdAt: { gte: weekStart }, event: { not: "" } }, _count: { _all: true } }),
   ]);
 
   const days: { key: string; pv: number; uv: number }[] = [];
@@ -81,6 +83,8 @@ async function loadStats() {
     countries: countries.map((row) => ({ country: row.country || "—", count: row._count._all })).filter((row) => row.count > 0),
     referrers: [...referrers.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8),
     recent: recent.length,
+    applyVisitUv: new Set(applyVisits.map((row) => row.ipHash)).size,
+    events: Object.fromEntries(eventRows.map((row) => [row.event, row._count._all])) as Record<string, number>,
   };
 }
 
@@ -154,6 +158,48 @@ export default async function AdminTrafficPage() {
                 <p className="mt-1 text-xs text-[#64748b]">{card.hint}</p>
               </div>
             ))}
+          </section>
+
+          <section className="mt-6 rounded-xl border border-[#e2e8f0] bg-white p-6">
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <h2 className="text-lg font-semibold text-[#0f172a]">转化漏斗（7 天）</h2>
+              <p className="text-xs text-[#94a3b8]">访问申请页 → 提交申请 → 领取成功</p>
+            </div>
+            {(() => {
+              const submits = (stats.events.apply_submit_api ?? 0) + (stats.events.apply_submit_alpha ?? 0) + (stats.events.apply_submit_memory ?? 0);
+              const claims = (stats.events.claim_alpha ?? 0) + (stats.events.claim_memory ?? 0);
+              const steps = [
+                { label: "访问申请页", value: stats.applyVisitUv, hint: "UV /apply + /alpha-desk" },
+                { label: "提交申请", value: submits, hint: "api + alpha-desk + memory" },
+                { label: "领取成功", value: claims, hint: "license / 记忆 token" },
+              ];
+              return (
+                <div className="mt-5 space-y-4">
+                  {steps.map((step, index) => {
+                    const prev = index === 0 ? null : steps[index - 1];
+                    const rate = prev && prev.value > 0 ? Math.round((step.value / prev.value) * 100) : null;
+                    const width = steps[0].value > 0 ? Math.max(4, Math.round((step.value / steps[0].value) * 100)) : 4;
+                    return (
+                      <div key={step.label}>
+                        <div className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
+                          <span className="font-medium text-[#0f172a]">{step.label}</span>
+                          <span className="text-[#64748b]">
+                            {step.value.toLocaleString("zh-CN")}
+                            {rate !== null && <span className="ml-2 text-xs text-[#94a3b8]">转化 {rate}%</span>}
+                          </span>
+                        </div>
+                        <div className="mt-1 h-7 overflow-hidden rounded-md bg-[#f1f5f9]">
+                          <div className="flex h-full items-center rounded-md bg-[#0284c7] px-2 text-xs font-medium text-white" style={{ width: `${width}%` }}>
+                            {step.value}
+                          </div>
+                        </div>
+                        <p className="mt-1 text-xs text-[#94a3b8]">{step.hint}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
           </section>
 
           <section className="mt-6 rounded-xl border border-[#e2e8f0] bg-white p-6">

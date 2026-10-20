@@ -35,8 +35,9 @@ export async function POST(request: Request): Promise<NextResponse> {
   try {
     const body = await request.text();
     if (!body || body.length > MAX_BODY) return new NextResponse(null, { status: 204 });
-    const payload = JSON.parse(body) as { path?: unknown; referrer?: unknown };
+    const payload = JSON.parse(body) as { path?: unknown; referrer?: unknown; event?: unknown };
     const path = cleanPath(payload.path);
+    const event = typeof payload.event === "string" && /^[a-z0-9_]{3,40}$/.test(payload.event) ? payload.event : "";
     const ua = request.headers.get("user-agent") ?? "";
     if (!path || BOT_RE.test(ua)) return new NextResponse(null, { status: 204 });
 
@@ -48,6 +49,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     await prisma.pageview.create({
       data: {
         path,
+        event,
         referrer,
         device: deviceOf(ua),
         country,

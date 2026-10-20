@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { trackEvent } from "@/lib/client-track";
 
 type Lang = "en" | "zh";
 type Group = { name: string; label: string };
@@ -223,6 +224,7 @@ export function ApplyForm({ lang, initialReq = "" }: { lang: Lang; initialReq?: 
         setMsg({ text: d.hint || d.error || `HTTP ${r.status}`, err: true });
       } else {
         setReqNo(d.req_no);
+        trackEvent("apply_submit_api");
         setReqId(String(d.id ?? ""));
         setMsg({ text: "" });
       }

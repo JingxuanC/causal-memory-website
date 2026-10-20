@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { trackEvent } from "@/lib/client-track";
 
 type Lang = "en" | "zh";
 
@@ -249,6 +250,7 @@ export function MemoryApplyForm({
         return;
       }
       setReqNo(data.req_no);
+        trackEvent("apply_submit_memory");
       setQueryNo(data.req_no);
       setMsg({ text: "" });
       void runStatus(data.req_no);
@@ -281,6 +283,7 @@ export function MemoryApplyForm({
         setStatusMsg({ text: data.hint || data.error || `HTTP ${response.status}`, err: true });
         return;
       }
+      trackEvent("claim_memory");
       setClaimed({
         memoryToken: data.memoryToken,
         memory_url: data.memory_url,

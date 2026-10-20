@@ -163,6 +163,7 @@ model Comment {
 model Pageview {
   id        Int      @id @default(autoincrement())
   path      String
+  event     String   @default("")
   referrer  String   @default("")
   device    String   @default("")
   country   String   @default("")

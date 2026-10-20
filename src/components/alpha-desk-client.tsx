@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent } from "@/lib/client-track";
 
 type Lang = "en" | "zh";
 
@@ -204,6 +205,7 @@ export function AlphaDeskClient({
         return;
       }
       setReqNo(data.req_no);
+      trackEvent("apply_submit_alpha");
       setClaimNo(data.req_no);
       setMessage({ text: "" });
     } catch {
@@ -245,6 +247,7 @@ export function AlphaDeskClient({
         setClaimMessage({ text: data.hint ?? data.error ?? `HTTP ${response.status}`, err: true, link: data.signInUrl });
         return;
       }
+      trackEvent("claim_alpha");
       setLicense({
         license: data.license,
         plan: data.plan ?? "pro",
