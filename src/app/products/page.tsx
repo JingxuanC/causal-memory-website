@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getLang } from "@/lib/i18n";
-import { PaypalMemoryButton } from "@/components/paypal-memory-button";
+import { PurchaseBlock } from "@/components/purchase-block";
 
 export const metadata: Metadata = {
   title: "Products & install · Alpha Desk × Causal Memory",
@@ -251,9 +251,11 @@ export default async function ProductsPage() {
             <code className="rounded-md bg-white px-2 py-1 text-[#0f172a]">{d.memCode}</code>
             <span className="text-[#7c3aed]">{d.memNote}</span>
           </div>
-          <PaypalMemoryButton lang={lang} />
+
         </article>
       </section>
+
+      <PurchaseBlock lang={lang} />
 
       <section id="install" className="mt-14 scroll-mt-20">
         <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[#e2e8f0] pb-4">
