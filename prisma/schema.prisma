@@ -23,6 +23,7 @@ model User {
   accounts          Account[]
   sessions          Session[]
   apiTokens         ApiToken[]
+  licenseClaims     LicenseClaim[]
   comments          Comment[]
 }
 
@@ -61,15 +62,88 @@ model VerificationToken {
 }
 
 model ApiToken {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name       String
-  tokenHash  String   @unique
-  prefix     String
-  createdAt  DateTime @default(now())
-  lastUsedAt DateTime?
-  revokedAt  DateTime?
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  tokenHash    String    @unique
+  prefix       String
+  // Stable tenant namespace. Always `u_<User.id>` for new rows; legacy rows
+  // are backfilled by prisma/backfill-tenants.sql and TenantAlias keeps the
+  // old email -> u_<id> mapping for reads during the migration window.
+  tenant       String    @default("")
+  // When the token is entitlement-bound (Alpha Desk claim) this mirrors the
+  // license expiry; the cloud.json projection filters out expired rows.
+  expiresAt    DateTime?
+  // dashboard | alpha-desk
+  source       String    @default("dashboard")
+  createdAt    DateTime  @default(now())
+  lastUsedAt   DateTime?
+  revokedAt    DateTime?
+  licenseClaim LicenseClaim?
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+}
+
+// One row per redeemed Alpha Desk request. `reqNo` is unique, so a request
+// can be bound to exactly one website user. The memory token plaintext is
+// never stored; only the ApiToken id (hash at rest) is referenced.
+model LicenseClaim {
+  id             String    @id @default(cuid())
+  reqNo          String    @unique
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant         String
+  plan           String
+  features       String    @default("[]") // JSON array, display/audit only
+  memoryGranted  Boolean   @default(false)
+  memoryTokenId  String?   @unique
+  memoryToken    ApiToken? @relation(fields: [memoryTokenId], references: [id], onDelete: SetNull)
+  alphaKeyId     String    @default("")
+  alphaKeyName   String    @default("")
+  // SHA-256 of the issued ADK1 license (never the license itself: it embeds
+  // the cloud_key / memory_token bearer values).
+  licenseSha256  String    @default("")
+  // pending -> issued | failed | revoked
+  status         String    @default("pending")
+  errorCode      String    @default("")
+  issuedAt       DateTime  @default(now())
+  expiresAt      DateTime
+  revokedAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+// Transactional retry queue for cloud.json writes. The DB is the source of
+// truth: if a bridge write fails, the row stays pending and a reconciliation
+// script (or the next request) retries it.
+model BridgeOutbox {
+  id          String    @id @default(cuid())
+  op          String // add | remove
+  tokenHash   String
+  tenant      String    @default("")
+  attempts    Int       @default(0)
+  lastError   String?
+  createdAt   DateTime  @default(now())
+  processedAt DateTime?
+
+  @@index([processedAt, createdAt])
+}
+
+// Read-time compatibility map for legacy email-based tenants. Writes always
+// use `u_<User.id>`; reads resolve `legacyTenant` to the canonical tenant.
+model TenantAlias {
+  legacyTenant String   @id
+  tenant       String
+  userId       String?
+  note         String?
+  createdAt    DateTime @default(now())
+
+  @@index([tenant])
 }
 
 model Comment {

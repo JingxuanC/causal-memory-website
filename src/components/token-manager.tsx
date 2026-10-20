@@ -3,11 +3,20 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-type Token = { id: string; name: string; prefix: string; createdAt: string };
+type Token = {
+  id: string;
+  name: string;
+  prefix: string;
+  tenant?: string;
+  source?: string;
+  expiresAt?: string | null;
+  createdAt: string;
+};
 
 type Labels = {
   tokenName: string; createToken: string; creating: string; tokenCreated: string;
   copy: string; copied: string; revoke: string; noTokens: string;
+  error: string; expires: string; tenant: string;
 };
 
 export function TokenManager({ tokens, labels }: { tokens: Token[]; labels: Labels }) {
@@ -15,12 +24,14 @@ export function TokenManager({ tokens, labels }: { tokens: Token[]; labels: Labe
   const [pending, setPending] = useState(false);
   const [freshToken, setFreshToken] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   async function create(e: React.FormEvent) {
     e.preventDefault();
     setPending(true);
     setFreshToken(null);
+    setError("");
     const res = await fetch("/api/tokens", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -32,6 +43,9 @@ export function TokenManager({ tokens, labels }: { tokens: Token[]; labels: Labe
       setFreshToken(data.token);
       setName("");
       router.refresh();
+    } else {
+      const data = (await res.json().catch(() => ({}))) as { hint?: string; error?: string };
+      setError(data.hint ?? data.error ?? labels.error);
     }
   }
 
@@ -57,6 +71,8 @@ export function TokenManager({ tokens, labels }: { tokens: Token[]; labels: Labe
           {pending ? labels.creating : labels.createToken}
         </button>
       </form>
+
+      {error ? <p className="mt-3 text-sm text-[#b91c1c]">{error}</p> : null}
 
       {freshToken && (
         <div className="mt-4 rounded-md border border-[#059669]/40 bg-[#059669]/10 p-4">
@@ -91,7 +107,8 @@ export function TokenManager({ tokens, labels }: { tokens: Token[]; labels: Labe
             <div>
               <p className="text-sm font-medium text-[#0f172a]">{t.name}</p>
               <p className="text-xs text-[#94a3b8] font-mono">
-                {t.prefix}… · created {t.createdAt.slice(0, 10)}
+                {t.prefix}… · {labels.tenant} {t.tenant ?? "—"} · created {t.createdAt.slice(0, 10)}
+                {t.expiresAt ? ` · ${labels.expires} ${t.expiresAt.slice(0, 10)}` : ""}
               </p>
             </div>
             <button

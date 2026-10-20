@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check": "tsc --noEmit",
+    "prisma:generate": "prisma generate",
+    "bridge:check": "node scripts/check-memory-bridge.mjs",
+    "bridge:reconcile": "node scripts/reconcile-memory-bridge.mjs",
+    "tenants:migrate": "node scripts/migrate-tenants.mjs",
+    "tenants:plan-dbs": "node scripts/plan-tenant-db-migration.mjs",
+    "bridge:test": "node --no-warnings --experimental-strip-types scripts/test-memory-bridge.mjs"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",

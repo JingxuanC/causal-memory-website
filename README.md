@@ -23,6 +23,10 @@ Official website for [causal-memory](https://github.com/JingxuanC/causal-memory)
 npm install
 cp .env.example .env
 # Fill in AUTH_SECRET (openssl rand -base64 32), AUTH_GITHUB_ID, AUTH_GITHUB_SECRET
+# For local token testing also set:
+#   CM_TOKENS_BRIDGE=$PWD/data/cloud.json
+#   ALPHA_CLAIM_SECRET=dev-only-shared-secret
+# Without CM_TOKENS_BRIDGE, token creation / Pro claims return 503 by design.
 npx prisma db push
 npm run dev
 ```
@@ -51,9 +55,13 @@ existing key-request pipeline:
    (or redirects to `ALPHA_DESK_DOWNLOAD_URL`).
 2. Apply: the page submits to the existing `/api/key-request` proxy with
    groups `alpha,memory`.
-3. Claim: `POST /api/alpha-desk/claim` picks up the approved mcphub cloud key
-   once, embeds it in an offline-signed `ADK1.…` license, and returns it. The
-   cloud key is never stored by the website.
+3. Claim: `POST /api/alpha-desk/claim` requires GitHub sign-in, verifies the
+   request is bound to the signed-in user (HMAC identity to quota-platform),
+   picks up the approved mcphub cloud key once, mints a tenant-bound `cm_`
+   memory token (`ApiToken`, SHA-256 only, tenant `u_<user.id>`), projects its
+   hash into `cloud.json`, and embeds both credentials in an offline-signed
+   `ADK1.…` license. The cloud key and memory token are never stored in
+   plaintext by the website.
 
 Deployment variables (see `.env.example`):
 
@@ -62,7 +70,16 @@ ALPHA_DESK_ZIP_PATH=/app/data/alpha-desk-0.1.2-dev.zip
 ALPHA_LICENSE_PRIVATE_KEY_PATH=/app/secrets/alpha-license-private.pem
 ALPHA_LICENSE_PUBLIC_KEY_PATH=/app/secrets/alpha-license-public.pem
 ALPHA_LICENSE_DAYS=365
+CM_TOKENS_BRIDGE=/opt/mcp-suite/causal-memory/tokens/cloud.json
+ALPHA_CLAIM_SECRET=          # same value on quota-platform
+MEMORY_PUBLIC_URL=https://causal-memory.com/memory/mcp
 ```
+
+Pro → cloud memory design, migration and rollout/rollback steps:
+[docs/CLOUD-MEMORY-PRO-CLAIM.md](docs/CLOUD-MEMORY-PRO-CLAIM.md). The short
+version: `CM_TOKENS_BRIDGE` missing => token creation and Pro claims fail
+closed (503), never open memory; `ALPHA_CLAIM_SECRET` missing => claims fail
+closed. Old licenses keep working with `cloud_key`.
 
 The private key is the same keypair as `alpha-desk/product/license/public.pem`.
 Mount it read-only; do not commit it. Offline licenses cannot be revoked, so a

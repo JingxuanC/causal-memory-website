@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { auth } from "@/auth";
 import { getLang } from "@/lib/i18n";
 import { AlphaDeskClient } from "@/components/alpha-desk-client";
 
@@ -29,7 +30,7 @@ const FEATURES = {
 } as const;
 
 export default async function AlphaDeskPage() {
-  const lang = await getLang();
+  const [lang, session] = await Promise.all([getLang(), auth()]);
   const zh = lang === "zh";
   const features = FEATURES[zh ? "zh" : "en"];
 
@@ -73,7 +74,7 @@ export default async function AlphaDeskPage() {
       </section>
 
       <section id="download" className="scroll-mt-20">
-        <AlphaDeskClient lang={lang} />
+        <AlphaDeskClient lang={lang} signedIn={Boolean(session?.user)} />
       </section>
 
       <section id="compliance" className="mt-10 scroll-mt-20 rounded-2xl border border-[#e2e8f0] bg-[#f8fafc] p-6 text-sm text-[#475569]">

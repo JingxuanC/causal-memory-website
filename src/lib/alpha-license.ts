@@ -18,13 +18,25 @@ import { readFileSync } from "node:fs";
 export type AlphaPlan = "pro" | "memory";
 
 export type AlphaLicensePayload = {
+  // The installed verifier (0.1.15) rejects v != 1. New fields are additive,
+  // so old clients keep reading cloud_key while newer clients use memory_url /
+  // memory_token and stop routing memory through mcphub.
   v: 1;
-  sub: string;
+  sub: string; // canonical tenant u_<User.id> (was a free-form display name)
+  name?: string;
   plan: AlphaPlan;
   iat: number;
   exp: number;
   features: string[];
+  // Legacy mcphub group key: /hub/mcp/alpha + /hub/mcp/memory compatibility.
   cloud_key?: string;
+  // Alpha-only view of the same mcphub key (new clients; optional).
+  alpha_key?: string;
+  // Direct causal-memory endpoint + tenant-bound cm_ token (new clients).
+  memory_url?: string;
+  memory_token?: string;
+  tenant?: string;
+  request?: string; // REQ-XXXXXXXX, for support/audit
 };
 
 function base64url(data: Buffer): string {
@@ -92,4 +104,10 @@ export function assertLicenseVerifies(key: string, publicKeyPem: string | null):
 export function licenseDays(): number {
   const raw = Number(process.env.ALPHA_LICENSE_DAYS ?? 365);
   return Number.isFinite(raw) && raw > 0 ? Math.min(3650, Math.floor(raw)) : 365;
+}
+
+/** Public direct-memory endpoint embedded in v2-capable licenses. */
+export function memoryPublicUrl(): string {
+  const raw = process.env.MEMORY_PUBLIC_URL?.trim();
+  return raw && /^https?:\/\//i.test(raw) ? raw : "https://causal-memory.com/memory/mcp";
 }

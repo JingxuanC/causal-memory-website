@@ -40,7 +40,15 @@ export default async function Dashboard() {
 
   const tokens = await prisma.apiToken.findMany({
     where: { userId: session.user.id, revokedAt: null },
-    select: { id: true, name: true, prefix: true, createdAt: true },
+    select: {
+      id: true,
+      name: true,
+      prefix: true,
+      tenant: true,
+      source: true,
+      expiresAt: true,
+      createdAt: true,
+    },
     orderBy: { createdAt: "desc" },
   });
   const user = await prisma.user.findUnique({
@@ -85,7 +93,11 @@ export default async function Dashboard() {
         <p className="mt-1 text-sm text-[#64748b]">{d.tokenSub}</p>
         <div className="mt-4">
           <TokenManager
-            tokens={tokens.map((tk) => ({ ...tk, createdAt: tk.createdAt.toISOString() }))}
+            tokens={tokens.map((tk) => ({
+              ...tk,
+              createdAt: tk.createdAt.toISOString(),
+              expiresAt: tk.expiresAt ? tk.expiresAt.toISOString() : null,
+            }))}
             labels={{
               tokenName: d.tokenName,
               createToken: d.createToken,
@@ -95,6 +107,9 @@ export default async function Dashboard() {
               copied: d.copied,
               revoke: d.revoke,
               noTokens: d.noTokens,
+              error: d.tokenError,
+              expires: d.tokenExpires,
+              tenant: d.tokenTenant,
             }}
           />
         </div>
