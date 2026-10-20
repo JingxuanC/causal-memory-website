@@ -157,3 +157,19 @@ model Comment {
 
   @@index([postSlug])
 }
+
+// First-party, cookie-less pageview analytics. IP and UA are only stored as
+// salted SHA-256 prefixes, so a row can be counted but not traced back.
+model Pageview {
+  id        Int      @id @default(autoincrement())
+  path      String
+  referrer  String   @default("")
+  device    String   @default("")
+  country   String   @default("")
+  uaHash    String   @default("")
+  ipHash    String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([path, createdAt])
+}

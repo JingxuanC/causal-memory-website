@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { getLang, t } from "@/lib/i18n";
 import { LangToggle } from "@/components/lang-toggle";
+import { PageviewTracker } from "@/components/pageview-tracker";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -35,6 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={lang === "zh" ? "zh-CN" : "en"} className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        <PageviewTracker />
         <header className="border-b border-[#e2e8f0] sticky top-0 z-40 bg-[#ffffff]/90 backdrop-blur">
           <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
             <Link href="/" className="font-bold text-[#0f172a] tracking-tight">

@@ -3,9 +3,10 @@ import Link from "next/link";
 const ITEMS = [
   { key: "requests" as const, href: "/admin", label: "申请审批" },
   { key: "monitor" as const, href: "/admin/monitor", label: "调用监控" },
+  { key: "traffic" as const, href: "/admin/traffic", label: "访问统计" },
 ];
 
-export function AdminTabs({ active }: { active: "requests" | "monitor" }) {
+export function AdminTabs({ active }: { active: "requests" | "monitor" | "traffic" }) {
   return (
     <nav className="mt-6 flex gap-2 border-b border-[#e2e8f0] text-sm">
       {ITEMS.map((item) => (
