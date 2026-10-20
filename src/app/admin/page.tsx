@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { isAdmin } from "@/lib/admin";
 import { AdminRequests } from "@/components/admin-requests";
 import { AdminTabs } from "@/components/admin-tabs";
+import { AdminGrant } from "@/components/admin-grant";
 import { fetchQuotaRequests, parseAdminStatus, toAdminRows } from "@/lib/quota-admin";
 
 export const metadata: Metadata = {
@@ -88,6 +89,8 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
       </header>
 
       <AdminTabs active="requests" />
+
+      <AdminGrant />
 
       {result.ok ? (
         <AdminRequests
