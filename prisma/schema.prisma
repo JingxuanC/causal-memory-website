@@ -174,3 +174,21 @@ model Pageview {
   @@index([createdAt])
   @@index([path, createdAt])
 }
+
+// PayPal subscription for the cloud-memory add-on. Created by the webhook and
+// claimed by the logged-in user whose email matches the payer email.
+model MemorySubscription {
+  id             Int       @id @default(autoincrement())
+  subscriptionId String    @unique
+  planId         String    @default("")
+  email          String    @default("")
+  userId         String?
+  status         String    @default("")
+  lastEvent      String    @default("")
+  activatedAt    DateTime?
+  cancelledAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([email])
+}

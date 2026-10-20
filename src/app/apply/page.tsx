@@ -55,6 +55,7 @@ export default async function ApplyPage({
               : "Subscribe via PayPal at $14/mo (≈¥99) and get activated within 10 minutes, or use the request form above."}
           </p>
           <PaypalMemoryButton lang={lang} />
+          <p className="mt-3 text-sm"><a className="text-[#0284c7] hover:text-[#0369a1]" href="/memory/activate">{zh ? "已付款？用订阅号激活 →" : "Already paid? Activate with your subscription ID →"}</a></p>
         </section>
       )}
 
