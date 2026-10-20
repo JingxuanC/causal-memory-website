@@ -66,16 +66,26 @@ export default async function Dashboard() {
             <span className="text-[#0f172a]">{session.user.name ?? session.user.email}</span>
           </p>
         </div>
-        <form
-          action={async () => {
-            "use server";
-            await signOut();
-          }}
-        >
-          <button className="rounded-md border border-[#cbd5e1] px-3 py-1.5 text-xs text-[#64748b] hover:text-[#0f172a] transition-colors">
-            {d.signOut}
-          </button>
-        </form>
+        <div className="flex items-center gap-2">
+          {isAdmin(session) && (
+            <Link
+              href="/admin"
+              className="rounded-md border border-[#0284c7] px-3 py-1.5 text-xs font-semibold text-[#0284c7] transition-colors hover:bg-[#f0f9ff]"
+            >
+              {d.adminConsole}
+            </Link>
+          )}
+          <form
+            action={async () => {
+              "use server";
+              await signOut();
+            }}
+          >
+            <button className="rounded-md border border-[#cbd5e1] px-3 py-1.5 text-xs text-[#64748b] hover:text-[#0f172a] transition-colors">
+              {d.signOut}
+            </button>
+          </form>
+        </div>
       </div>
 
       <section className="mt-10 flex items-center justify-between rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-6 py-4">
