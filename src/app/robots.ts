@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/data/seo";
 
 /**
- * Only the API is disallowed. /admin, /dashboard, /apply and /memory/activate
+ * Only the API is disallowed. /admin, /dashboard, /apply and /activate-memory
  * are noindex via metadata instead of robots.txt, because a disallowed URL
  * cannot be crawled and therefore its noindex directive is never seen — the URL
  * can still be indexed from external links.

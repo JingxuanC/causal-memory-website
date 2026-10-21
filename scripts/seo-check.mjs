@@ -65,7 +65,7 @@ const NOINDEX_ROUTES = [
   { url: "/admin", file: "src/app/admin/page.tsx" },
   { url: "/dashboard", file: "src/app/dashboard/page.tsx" },
   { url: "/apply", file: "src/app/apply/page.tsx" },
-  { url: "/memory/activate", file: "src/app/memory/activate/page.tsx" },
+  { url: "/activate-memory", file: "src/app/activate-memory/page.tsx" },
 ];
 
 function expectedJsonLd(page) {

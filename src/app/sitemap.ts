@@ -48,7 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/book", SITE_UPDATED, 0.5, "monthly"),
   ];
 
-  // /apply, /dashboard, /admin and /memory/activate are intentionally absent:
+  // /apply, /dashboard, /admin and /activate-memory are intentionally absent:
   // they are noindex and have no business being submitted for crawling.
   return [...hubs, ...benchmark, ...comparisons, ...useCases, ...integrations, ...existing];
 }
