@@ -8,7 +8,7 @@ import { PostEditor } from "@/components/post-editor";
 import { isAdmin } from "@/lib/admin";
 import { getLang, t } from "@/lib/i18n";
 
-export const metadata: Metadata = { title: "Cloud Dashboard" };
+export const metadata: Metadata = { title: "Cloud Dashboard", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 
 export default async function Dashboard() {

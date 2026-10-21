@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { getLang, t } from "@/lib/i18n";
+import { SITE_URL } from "@/data/seo/site";
 import { LangToggle } from "@/components/lang-toggle";
 import { PageviewTracker } from "@/components/pageview-tracker";
 import "./globals.css";
@@ -10,6 +11,7 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "causal-memory — agent memory with a causal core",
     template: "%s · causal-memory",
@@ -69,6 +71,22 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </header>
         <main className="flex-1">{children}</main>
         <footer className="border-t border-[#e2e8f0] py-8 text-center text-sm text-[#94a3b8]">
+          {lang === "en" ? (
+            <nav aria-label="Footer" className="mb-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+              <Link href="/compare" className="text-[#64748b] transition-colors hover:text-[#0f172a]">
+                Compare
+              </Link>
+              <Link href="/use-cases" className="text-[#64748b] transition-colors hover:text-[#0f172a]">
+                Use cases
+              </Link>
+              <Link href="/benchmarks/causaleval" className="text-[#64748b] transition-colors hover:text-[#0f172a]">
+                CausalEval
+              </Link>
+              <Link href="/docs/getting-started" className="text-[#64748b] transition-colors hover:text-[#0f172a]">
+                Docs
+              </Link>
+            </nav>
+          ) : null}
           <p>
             Apache-2.0 ·{" "}
             <a href="https://github.com/JingxuanC/causal-memory" className="hover:text-[#64748b]">

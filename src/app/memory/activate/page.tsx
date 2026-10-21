@@ -5,7 +5,7 @@ import { getLang } from "@/lib/i18n";
 import { memoryActivateCopy } from "./copy";
 import { ActivateForm } from "./activate-form";
 
-export const metadata: Metadata = { title: "Activate cloud memory" };
+export const metadata: Metadata = { title: "Activate cloud memory", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 
 export default async function ActivateMemoryPage() {

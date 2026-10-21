@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Apply — MCP API key, Alpha Desk Pro & cloud memory",
   description:
     "One page for three products: a group-scoped MCP API key (anonymous), Alpha Desk Pro ¥499/month (GitHub sign-in) and cloud memory ¥99/month (GitHub sign-in). Human-reviewed; each product delivers a different credential.",
+  robots: { index: false, follow: false },
 };
 
 export default async function ApplyPage({
