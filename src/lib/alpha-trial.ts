@@ -1,5 +1,6 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { bearer, verifyToken, AuthError } from "./alpha-auth";
 import {
   assertLicenseVerifies,
   loadPublicKey,
@@ -78,11 +79,22 @@ export function corsHeaders(request: Request): Record<string, string> {
 }
 
 export async function requireSupabaseUser(request: Request): Promise<SupabaseUser> {
-  const header = request.headers.get("authorization") ?? "";
-  if (!header.startsWith("Bearer ")) throw new TrialError("请先登录", 401, "unauthorized");
+  const token = bearer(request);
+  if (!token) throw new TrialError("请先登录", 401, "unauthorized");
+  // Local marketing-site accounts issued by /api/alpha-desk/auth/*.
+  if (token.startsWith("ADT1.")) {
+    try {
+      const user = verifyToken(token);
+      return { id: user.id, email: user.email };
+    } catch (error) {
+      if (error instanceof AuthError) throw new TrialError(error.message, error.status, error.code);
+      throw error;
+    }
+  }
+  // Existing LangAlpha users still work through their Supabase access token.
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) throw new TrialError("登录服务未配置", 503, "auth_unconfigured");
   const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-    headers: { Authorization: header, apikey: SUPABASE_ANON_KEY },
+    headers: { Authorization: `Bearer ${token}`, apikey: SUPABASE_ANON_KEY },
     cache: "no-store",
   });
   if (!response.ok) throw new TrialError("登录已失效，请重新登录", 401, "unauthorized");
