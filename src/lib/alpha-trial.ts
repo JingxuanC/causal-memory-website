@@ -132,6 +132,11 @@ export async function startTrial(user: SupabaseUser): Promise<TrialRecord> {
   });
 }
 
+export async function getTrial(user: SupabaseUser): Promise<TrialRecord | null> {
+  const ledger = await readLedger();
+  return ledger.users[user.id] ?? null;
+}
+
 export async function requireActiveTrial(user: SupabaseUser): Promise<TrialRecord> {
   const ledger = await readLedger();
   const record = ledger.users[user.id];
